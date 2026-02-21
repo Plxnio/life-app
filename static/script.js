@@ -92,7 +92,13 @@ async function cadastrarEmail() {
 }
 
 async function loginGoogle() {
-    await supabaseClient.auth.signInWithOAuth({ provider: 'google' });
+    console.log("Botão do Google clicado!");
+    await supabaseClient.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+            redirectTo: window.location.origin 
+        }
+    });
 }
 
 async function fazerLogout() {
