@@ -102,7 +102,8 @@ function liberarDashboard() {
         if (btnTrabalho) btnTrabalho.style.setProperty('display', 'none', 'important');
         if (tabTrabalho) tabTrabalho.style.setProperty('display', 'none', 'important');
     } else {
-        if (btnTrabalho) btnTrabalho.style.display = 'block';
+        // MUDANÇA: Usando display 'flex' para manter o alinhamento com os outros botões do menu
+        if (btnTrabalho) btnTrabalho.style.display = 'flex';
     }
 
     carregarDados();
@@ -277,6 +278,13 @@ async function enviarFormulario(event) {
             btn.disabled = false;
             form.reset();
             document.getElementById('campo-data').value = new Date().toISOString().split('T')[0];
+            
+            // MUDANÇA: Limpando explicitamente o campo da data final após salvar
+            const campoDataFim = document.getElementById('campo-data-fim');
+            if (campoDataFim) {
+                campoDataFim.value = '';
+            }
+
             carregarDados(); // Recarrega os painéis automaticamente
         }, 1500);
     } catch (e) { 
