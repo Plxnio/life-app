@@ -46,61 +46,19 @@ async function loginEmail() {
     const senha = document.getElementById('senha').value.trim();
     const erroEl = document.getElementById('erro-login');
 
-    if (!email || !senha) {
-        erroEl.innerText = "Por favor, digite seu e-mail e senha.";
-        erroEl.classList.remove('d-none');
-        return;
-    }
-
-    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password: senha });
+    const { data, error } = await supabaseClient.auth.signInWithPassword({ 
+        email, 
+        password: senha 
+    });
 
     if (error) {
         erroEl.innerText = "Erro ao logar: " + error.message;
         erroEl.classList.remove('d-none');
     } else {
         usuarioLogadoId = data.user.id;
-        liberarDashboard();
+        // Apenas esconde o login e mostra o dashboard na mesma página
+        liberarDashboard(); 
     }
-}
-
-async function cadastrarEmail() {
-    const email = document.getElementById('email').value.trim();
-    const senha = document.getElementById('senha').value.trim();
-    const erroEl = document.getElementById('erro-login');
-
-    if (!email || !senha) {
-        erroEl.innerText = "Por favor, preencha e-mail e senha para cadastrar.";
-        erroEl.classList.remove('d-none');
-        return;
-    }
-
-    if (senha.length < 6) {
-        erroEl.innerText = "A senha deve ter pelo menos 6 caracteres.";
-        erroEl.classList.remove('d-none');
-        return;
-    }
-
-    const { data, error } = await supabaseClient.auth.signUp({ email, password: senha });
-
-    if (error) {
-        erroEl.innerText = "Erro ao cadastrar: " + error.message;
-        erroEl.classList.remove('d-none');
-    } else {
-        alert("Cadastro realizado! Se você não desativou a confirmação, olhe sua caixa de e-mail.");
-        document.getElementById('senha').value = '';
-    }
-}
-
-async function loginGoogle() {
-    const { data, error } = await supabaseClient.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-            queryParams: {
-                access_type: 'offline',
-                prompt: 'consent',
-            }
-        }
-    });
 }
 
 async function fazerLogout() {
