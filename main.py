@@ -15,10 +15,13 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-# Configuração de CORS
+# O Render precisa que isso esteja explícito
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # Permite qualquer origem (ideal para teste inicial no Render)
+    allow_origins=[
+        "http://localhost:8000",
+        "https://life-app-4d44.onrender.com/" # ADICIONE O SEU LINK DO RENDER AQUI
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
