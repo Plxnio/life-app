@@ -103,7 +103,6 @@ function liberarDashboard() {
         if (tabTrabalho) tabTrabalho.style.setProperty('display', 'none', 'important');
     } else {
         if (btnTrabalho) btnTrabalho.style.display = 'block';
-        // tabTrabalho volta a responder ao sistema de abas do mudarAbaCadastro
     }
 
     carregarDados();
@@ -115,7 +114,6 @@ const formatarMoeda = (valor) => {
 }
 
 function mudarAbaCadastro(tipo, botaoClicado) {
-    // Impede que usuários não autorizados forcem a abertura da aba trabalho via console
     if (tipo === 'trabalho' && usuarioLogadoId !== MEU_ID_AUTORIZADO) {
         alert("Acesso restrito.");
         return;
@@ -185,9 +183,8 @@ async function carregarDados() {
         }
     }
 
-    // 2. Trabalho (SÓ CARREGA SE FOR O USUÁRIO AUTORIZADO)
+    // 2. Trabalho 
     if (usuarioLogadoId === MEU_ID_AUTORIZADO) {
-        // Agora passando o user_id na URL conforme o novo Python exige
         const resTrab = await fetch(`/trabalho/dados?mes=${mes}&ano=${ano}&user_id=${usuarioLogadoId}`);
         const dTr = await resTrab.json();
         document.getElementById('trab-total').innerText = dTr.total_horas;
@@ -222,18 +219,36 @@ async function enviarFormulario(event) {
     const formData = new FormData(form);
     const tipo = document.getElementById('tipo-lancamento').value;
     
-    // Trava de segurança no envio
+    // Trava de segurança
     if (tipo === 'trabalho' && usuarioLogadoId !== MEU_ID_AUTORIZADO) {
         alert("Você não tem permissão para salvar horas.");
         return;
     }
+
+    // Tradução do campo de trabalho para o Python aceitar
+    if (tipo === 'trabalho') {
+        const tipoHora = form.querySelector('[name="tipo_hora"]').value;
+        formData.append('tipo', tipoHora);
+    }
+
+    // Evita enviar campos em branco (importante para os dados não ficarem sujos e darem erro no fastapi)
+    const chavesParaRemover = [];
+    formData.forEach((value, key) => {
+        if (value === "") chavesParaRemover.push(key);
+    });
+    chavesParaRemover.forEach(k => formData.delete(k));
 
     let url = (tipo === 'financeiro') ? '/financeiro/salvar' : (tipo === 'trabalho') ? '/trabalho/salvar' : '/fisico/salvar';
     formData.append('user_id', usuarioLogadoId);
 
     try {
         const response = await fetch(url, { method: 'POST', body: formData });
-        if (!response.ok) throw new Error('Erro ao salvar');
+        
+        if (!response.ok) {
+            const errText = await response.text();
+            console.error("Erro no servidor:", errText);
+            throw new Error(errText || 'Erro ao salvar');
+        }
         
         const btn = form.querySelector('button[type="submit"]');
         const originalText = btn.innerHTML;
@@ -247,7 +262,9 @@ async function enviarFormulario(event) {
             document.getElementById('campo-data').value = new Date().toISOString().split('T')[0];
             carregarDados();
         }, 1500);
-    } catch (e) { alert("Erro ao salvar."); }
+    } catch (e) { 
+        alert("Erro ao salvar! Verifique as informações (veja os detalhes no F12)."); 
+    }
 }
 
 let meuGrafico = null;
