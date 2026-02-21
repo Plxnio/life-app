@@ -92,8 +92,7 @@ async function cadastrarEmail() {
 }
 
 async function loginGoogle() {
-    console.log("Botão do Google clicado!");
-    await supabaseClient.auth.signInWithOAuth({
+    const { data, error } = await supabaseClient.auth.signInWithOAuth({
         provider: 'google',
         options: {
             redirectTo: window.location.origin 
