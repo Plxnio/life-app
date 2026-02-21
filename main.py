@@ -3,6 +3,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from fastapi.middleware.cors import CORSMiddleware
 from database import engine
 from models import Base
 
@@ -13,6 +14,15 @@ from routers import financeiro, trabalho, fisico
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+# Configuração de CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # Permite qualquer origem (ideal para teste inicial no Render)
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Configura arquivos estáticos (CSS e JS)
 app.mount("/static", StaticFiles(directory="static"), name="static")
