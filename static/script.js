@@ -128,22 +128,36 @@ function mudarAbaCadastro(tipo, botaoClicado) {
     const elTitulo = document.getElementById('titulo-pagina');
     if (elTitulo) elTitulo.innerText = titulos[tipo];
 
+    // 1. Esconde tudo visualmente
     document.getElementById('campos-fin').style.display = 'none';
     document.getElementById('campos-trab').style.display = 'none';
     document.getElementById('campos-fis').style.display = 'none';
 
+    // 2. DESATIVA TODOS os inputs das abas (Isso conserta o bug do botão de salvar!)
+    document.querySelectorAll('#campos-fin input, #campos-fin select').forEach(el => el.disabled = true);
+    document.querySelectorAll('#campos-trab input, #campos-trab select').forEach(el => el.disabled = true);
+    document.querySelectorAll('#campos-fis input, #campos-fis select').forEach(el => el.disabled = true);
+
     const divDataFim = document.getElementById('div-data-fim');
     const labelData = document.getElementById('label-data');
 
+    // 3. Reativa apenas a aba selecionada
     if (tipo === 'trabalho') {
         document.getElementById('campos-trab').style.display = 'block';
+        document.querySelectorAll('#campos-trab input, #campos-trab select').forEach(el => el.disabled = false);
         divDataFim.style.display = 'block';
         labelData.innerText = 'DATA INICIAL';
     } else {
         divDataFim.style.display = 'none';
         labelData.innerText = 'DATA';
-        if (tipo === 'financeiro') document.getElementById('campos-fin').style.display = 'block';
-        if (tipo === 'fisico') document.getElementById('campos-fis').style.display = 'block';
+        if (tipo === 'financeiro') {
+            document.getElementById('campos-fin').style.display = 'block';
+            document.querySelectorAll('#campos-fin input, #campos-fin select').forEach(el => el.disabled = false);
+        }
+        if (tipo === 'fisico') {
+            document.getElementById('campos-fis').style.display = 'block';
+            document.querySelectorAll('#campos-fis input, #campos-fis select').forEach(el => el.disabled = false);
+        }
     }
 
     document.querySelectorAll('.tab-pane').forEach(tab => tab.classList.remove('show', 'active'));
@@ -216,27 +230,30 @@ async function carregarDados() {
 async function enviarFormulario(event) {
     event.preventDefault();
     const form = document.getElementById('form-add');
+    
+    // Como os campos das outras abas estão desativados, o FormData pega APENAS o que importa!
     const formData = new FormData(form);
     const tipo = document.getElementById('tipo-lancamento').value;
     
-    // Trava de segurança
     if (tipo === 'trabalho' && usuarioLogadoId !== MEU_ID_AUTORIZADO) {
         alert("Você não tem permissão para salvar horas.");
         return;
     }
 
-    // Tradução do campo de trabalho para o Python aceitar
     if (tipo === 'trabalho') {
         const tipoHora = form.querySelector('[name="tipo_hora"]').value;
         formData.append('tipo', tipoHora);
     }
 
-    // Evita enviar campos em branco (importante para os dados não ficarem sujos e darem erro no fastapi)
-    const chavesParaRemover = [];
-    formData.forEach((value, key) => {
-        if (value === "") chavesParaRemover.push(key);
-    });
-    chavesParaRemover.forEach(k => formData.delete(k));
+    // A limpeza de campos vazios só deve acontecer no Físico (que tem vários opcionais)
+    // Se removermos campos do financeiro, o FastAPI recusa a conexão (Erro 422)
+    if (tipo === 'fisico') {
+        const chavesParaRemover = [];
+        formData.forEach((value, key) => {
+            if (value === "") chavesParaRemover.push(key);
+        });
+        chavesParaRemover.forEach(k => formData.delete(k));
+    }
 
     let url = (tipo === 'financeiro') ? '/financeiro/salvar' : (tipo === 'trabalho') ? '/trabalho/salvar' : '/fisico/salvar';
     formData.append('user_id', usuarioLogadoId);
@@ -260,10 +277,10 @@ async function enviarFormulario(event) {
             btn.disabled = false;
             form.reset();
             document.getElementById('campo-data').value = new Date().toISOString().split('T')[0];
-            carregarDados();
+            carregarDados(); // Recarrega os painéis automaticamente
         }, 1500);
     } catch (e) { 
-        alert("Erro ao salvar! Verifique as informações (veja os detalhes no F12)."); 
+        alert("Erro ao salvar! Abra o painel F12 (Console) para ver qual dado faltou preencher."); 
     }
 }
 
