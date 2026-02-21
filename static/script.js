@@ -5,6 +5,9 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 let usuarioLogadoId = null;
 
+// ID Administrativo (Único autorizado a ver a aba Trabalho)
+const MEU_ID_AUTORIZADO = '45dfb9ec-4689-46fd-b452-02772abd5e69';
+
 // --- OUVINTE DE AUTENTICAÇÃO ---
 supabaseClient.auth.onAuthStateChange((event, session) => {
     if (session) {
@@ -56,7 +59,6 @@ async function loginEmail() {
     }
 }
 
-// ✨ FUNÇÃO DE CADASTRO QUE ESTAVA FALTANDO ✨
 async function cadastrarEmail() {
     const email = document.getElementById('email').value.trim();
     const senha = document.getElementById('senha').value.trim();
@@ -74,12 +76,11 @@ async function cadastrarEmail() {
         erroEl.innerText = "Erro ao cadastrar: " + error.message;
         erroEl.classList.remove('d-none');
     } else {
-        // Se a confirmação de e-mail estiver OFF no Supabase, ele loga direto
         if (data.session) {
             usuarioLogadoId = data.user.id;
             liberarDashboard();
         } else {
-            alert("Cadastro realizado! Verifique seu e-mail (se a confirmação estiver ativa).");
+            alert("Cadastro realizado! Verifique seu e-mail.");
         }
     }
 }
@@ -92,16 +93,34 @@ async function fazerLogout() {
 function liberarDashboard() {
     document.getElementById('login-screen').classList.add('d-none');
     document.getElementById('dashboard').classList.remove('d-none');
+
+    // --- TRAVA DE SEGURANÇA VISUAL ---
+    const btnTrabalho = document.getElementById('btn-cad-trab'); 
+    const tabTrabalho = document.getElementById('tab-trabalho');
+
+    if (usuarioLogadoId !== MEU_ID_AUTORIZADO) {
+        if (btnTrabalho) btnTrabalho.style.setProperty('display', 'none', 'important');
+        if (tabTrabalho) tabTrabalho.style.setProperty('display', 'none', 'important');
+    } else {
+        if (btnTrabalho) btnTrabalho.style.display = 'block';
+        // tabTrabalho volta a responder ao sistema de abas do mudarAbaCadastro
+    }
+
     carregarDados();
     mudarAbaCadastro('financeiro', document.getElementById('btn-cad-fin'));
 }
 
-// --- RESTANTE DAS FUNÇÕES (PROSSEGUE IGUAL) ---
 const formatarMoeda = (valor) => {
     return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor);
 }
 
 function mudarAbaCadastro(tipo, botaoClicado) {
+    // Impede que usuários não autorizados forcem a abertura da aba trabalho via console
+    if (tipo === 'trabalho' && usuarioLogadoId !== MEU_ID_AUTORIZADO) {
+        alert("Acesso restrito.");
+        return;
+    }
+
     document.getElementById('tipo-lancamento').value = tipo;
     const botoes = document.querySelectorAll('.nav-btn');
     botoes.forEach(btn => btn.classList.remove('active'));
@@ -140,7 +159,7 @@ async function carregarDados() {
     const mes = document.getElementById('filtro-mes').value;
     const ano = new Date().getFullYear();
 
-    // Financeiro
+    // 1. Financeiro
     const resFin = await fetch(`/financeiro/dados?mes=${mes}&ano=${ano}&user_id=${usuarioLogadoId}`);
     const dadosFin = await resFin.json();
     document.getElementById('fin-ganho').innerText = formatarMoeda(dadosFin.ganho);
@@ -148,7 +167,6 @@ async function carregarDados() {
     document.getElementById('fin-lucro').innerText = formatarMoeda(dadosFin.lucro);
     document.getElementById('fin-poupanca').innerText = formatarMoeda(dadosFin.poupanca);
 
-    // Tabela Anual Fin
     const resFinAnual = await fetch(`/financeiro/anual?ano=${ano}&user_id=${usuarioLogadoId}`);
     const dadosFinAnual = await resFinAnual.json();
     const tabelaFinBody = document.getElementById('tabela-financeiro-anual');
@@ -167,15 +185,32 @@ async function carregarDados() {
         }
     }
 
-    // Trabalho
-    const resTrab = await fetch(`/trabalho/dados?mes=${mes}&ano=${ano}&user_id=${usuarioLogadoId}`);
-    const dTr = await resTrab.json();
-    document.getElementById('trab-total').innerText = dTr.total_horas;
-    document.getElementById('trab-extra').innerText = dTr.extras;
-    document.getElementById('trab-salario').innerText = formatarMoeda(dTr.salario);
-    if(document.getElementById('trab-valor-extra')) document.getElementById('trab-valor-extra').innerText = formatarMoeda(dTr.valor_extra);
+    // 2. Trabalho (SÓ CARREGA SE FOR O USUÁRIO AUTORIZADO)
+    if (usuarioLogadoId === MEU_ID_AUTORIZADO) {
+        // Agora passando o user_id na URL conforme o novo Python exige
+        const resTrab = await fetch(`/trabalho/dados?mes=${mes}&ano=${ano}&user_id=${usuarioLogadoId}`);
+        const dTr = await resTrab.json();
+        document.getElementById('trab-total').innerText = dTr.total_horas;
+        document.getElementById('trab-extra').innerText = dTr.extras;
+        document.getElementById('trab-salario').innerText = formatarMoeda(dTr.salario);
+        if(document.getElementById('trab-valor-extra')) document.getElementById('trab-valor-extra').innerText = formatarMoeda(dTr.valor_extra);
 
-    // Físico
+        const resAnualTrab = await fetch(`/trabalho/anual?ano=${ano}&user_id=${usuarioLogadoId}`);
+        const dAnTr = await resAnualTrab.json();
+        const tabelaBody = document.getElementById('tabela-trabalho-anual');
+        if (tabelaBody) {
+            tabelaBody.innerHTML = '';
+            const nomesMeses = ["", "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+            for (let m = 1; m <= 12; m++) {
+                const d = dAnTr[m];
+                if (d && d.total > 0) {
+                    tabelaBody.innerHTML += `<tr><td class="text-start">${nomesMeses[m]}</td><td>${d.total}h</td><td>${d.extra}h</td><td>${d.normal}h</td></tr>`;
+                }
+            }
+        }
+    }
+
+    // 3. Físico
     const resFis = await fetch(`/fisico/dados?user_id=${usuarioLogadoId}`);
     const dadosFis = await resFis.json();
     atualizarGrafico(dadosFis);
@@ -186,8 +221,14 @@ async function enviarFormulario(event) {
     const form = document.getElementById('form-add');
     const formData = new FormData(form);
     const tipo = document.getElementById('tipo-lancamento').value;
-    let url = (tipo === 'financeiro') ? '/financeiro/salvar' : (tipo === 'trabalho') ? '/trabalho/salvar' : '/fisico/salvar';
+    
+    // Trava de segurança no envio
+    if (tipo === 'trabalho' && usuarioLogadoId !== MEU_ID_AUTORIZADO) {
+        alert("Você não tem permissão para salvar horas.");
+        return;
+    }
 
+    let url = (tipo === 'financeiro') ? '/financeiro/salvar' : (tipo === 'trabalho') ? '/trabalho/salvar' : '/fisico/salvar';
     formData.append('user_id', usuarioLogadoId);
 
     try {
@@ -195,9 +236,13 @@ async function enviarFormulario(event) {
         if (!response.ok) throw new Error('Erro ao salvar');
         
         const btn = form.querySelector('button[type="submit"]');
+        const originalText = btn.innerHTML;
         btn.innerHTML = '✅ Salvo!';
+        btn.disabled = true;
+
         setTimeout(() => { 
-            btn.innerHTML = 'Salvar Lançamento';
+            btn.innerHTML = originalText;
+            btn.disabled = false;
             form.reset();
             document.getElementById('campo-data').value = new Date().toISOString().split('T')[0];
             carregarDados();
@@ -207,7 +252,9 @@ async function enviarFormulario(event) {
 
 let meuGrafico = null;
 function atualizarGrafico(dados) {
-    const ctx = document.getElementById('graficoFisico').getContext('2d');
+    const canvas = document.getElementById('graficoFisico');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
     if (meuGrafico) meuGrafico.destroy();
     meuGrafico = new Chart(ctx, {
         type: 'line',

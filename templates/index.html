@@ -24,16 +24,12 @@
             </div>
             <h4 class="fw-bold mb-1">Bem-vindo</h4>
             <p class="text-muted small mb-4">Acesse sua conta para continuar</p>
-            
+
             <input type="email" id="email" class="form-control mb-3" placeholder="Seu E-mail">
             <input type="password" id="senha" class="form-control mb-3" placeholder="Sua Senha">
-            
+
             <button onclick="loginEmail()" class="btn btn-primary w-100 mb-2">Entrar</button>
             <button onclick="cadastrarEmail()" class="btn btn-outline-primary w-100 mb-3">Criar Cadastro</button>
-            
-            <div class="d-flex align-items-center mb-3">
-                <hr class="flex-grow-1"><span class="mx-2 text-muted small">OU</span><hr class="flex-grow-1">
-            </div>
 
             <p id="erro-login" class="text-danger mt-3 small d-none"></p>
         </div>
@@ -52,7 +48,8 @@
                         <div class="icon-box"><i class="fas fa-wallet"></i></div>
                         Financeiro
                     </button>
-                    <button class="nav-btn" onclick="mudarAbaCadastro('trabalho', this)">
+                    <button id="btn-cad-trab" class="nav-btn" onclick="mudarAbaCadastro('trabalho', this)"
+                        style="display: none;">
                         <div class="icon-box"><i class="fas fa-briefcase"></i></div>
                         Trabalho
                     </button>
@@ -84,12 +81,18 @@
                             <select id="filtro-mes"
                                 class="form-select border-0 bg-transparent py-0 fw-bold text-primary"
                                 style="width: auto; box-shadow: none;" onchange="carregarDados()">
-                                <option value="1">Janeiro</option><option value="2">Fevereiro</option>
-                                <option value="3">Março</option><option value="4">Abril</option>
-                                <option value="5">Maio</option><option value="6">Junho</option>
-                                <option value="7">Julho</option><option value="8">Agosto</option>
-                                <option value="9">Setembro</option><option value="10">Outubro</option>
-                                <option value="11">Novembro</option><option value="12">Dezembro</option>
+                                <option value="1">Janeiro</option>
+                                <option value="2">Fevereiro</option>
+                                <option value="3">Março</option>
+                                <option value="4">Abril</option>
+                                <option value="5">Maio</option>
+                                <option value="6">Junho</option>
+                                <option value="7">Julho</option>
+                                <option value="8">Agosto</option>
+                                <option value="9">Setembro</option>
+                                <option value="10">Outubro</option>
+                                <option value="11">Novembro</option>
+                                <option value="12">Dezembro</option>
                             </select>
                         </div>
 
@@ -170,73 +173,102 @@
                                 </div>
 
                                 <div id="campos-fis" class="fade-in" style="display:none;">
-                                    
-                                    <h6 class="text-primary border-bottom pb-2 mb-3 mt-1 fw-bold" style="font-size: 0.85rem;">Geral / Composição</h6>
+                                    <h6 class="text-primary border-bottom pb-2 mb-3 mt-1 fw-bold"
+                                        style="font-size: 0.85rem;">Geral / Composição</h6>
                                     <div class="row g-2 mb-2">
                                         <div class="col-6">
-                                            <input type="number" step="0.01" name="peso" class="form-control border border-primary shadow-sm" placeholder="Peso (kg) *" required>
+                                            <input type="number" step="0.01" name="peso"
+                                                class="form-control border border-primary shadow-sm"
+                                                placeholder="Peso (kg) *" required>
                                         </div>
-                                        <div class="col-6"><input type="number" step="0.01" name="altura" class="form-control" placeholder="Altura (m)"></div>
+                                        <div class="col-6"><input type="number" step="0.01" name="altura"
+                                                class="form-control" placeholder="Altura (m)"></div>
                                     </div>
                                     <div class="row g-2 mb-2">
-                                        <div class="col-6"><input type="number" step="0.01" name="imc" class="form-control" placeholder="IMC"></div>
-                                        <div class="col-6"><input type="number" step="0.01" name="razao_cintura_quadril" class="form-control" placeholder="Cint/Quadril"></div>
+                                        <div class="col-6"><input type="number" step="0.01" name="imc"
+                                                class="form-control" placeholder="IMC"></div>
+                                        <div class="col-6"><input type="number" step="0.01" name="razao_cintura_quadril"
+                                                class="form-control" placeholder="Cint/Quadril"></div>
                                     </div>
                                     <div class="row g-2 mb-2">
-                                        <div class="col-6"><input type="number" step="0.01" name="massa_gorda_perc" class="form-control" placeholder="% Gorda"></div>
-                                        <div class="col-6"><input type="number" step="0.01" name="massa_gorda_kg" class="form-control" placeholder="KG Gorda"></div>
+                                        <div class="col-6"><input type="number" step="0.01" name="massa_gorda_perc"
+                                                class="form-control" placeholder="% Gorda"></div>
+                                        <div class="col-6"><input type="number" step="0.01" name="massa_gorda_kg"
+                                                class="form-control" placeholder="KG Gorda"></div>
                                     </div>
                                     <div class="row g-2 mb-2">
-                                        <div class="col-6"><input type="number" step="0.01" name="massa_magra_perc" class="form-control" placeholder="% Magra"></div>
-                                        <div class="col-6"><input type="number" step="0.01" name="massa_magra_kg" class="form-control" placeholder="KG Magra"></div>
+                                        <div class="col-6"><input type="number" step="0.01" name="massa_magra_perc"
+                                                class="form-control" placeholder="% Magra"></div>
+                                        <div class="col-6"><input type="number" step="0.01" name="massa_magra_kg"
+                                                class="form-control" placeholder="KG Magra"></div>
                                     </div>
                                     <div class="row g-2 mb-2">
-                                        <div class="col-6"><input type="number" step="0.01" name="densidade_corporal" class="form-control" placeholder="Densidade"></div>
-                                        <div class="col-6"><input type="number" step="0.01" name="soma_dobras" class="form-control" placeholder="Soma Dobras"></div>
+                                        <div class="col-6"><input type="number" step="0.01" name="densidade_corporal"
+                                                class="form-control" placeholder="Densidade"></div>
+                                        <div class="col-6"><input type="number" step="0.01" name="soma_dobras"
+                                                class="form-control" placeholder="Soma Dobras"></div>
                                     </div>
                                     <div class="row g-2 mb-3">
-                                        <div class="col-6"><input type="number" step="0.01" name="amb" class="form-control" placeholder="AMB (Músculo)"></div>
-                                        <div class="col-6"><input type="number" step="0.01" name="agb" class="form-control" placeholder="AGB (Gordura)"></div>
+                                        <div class="col-6"><input type="number" step="0.01" name="amb"
+                                                class="form-control" placeholder="AMB (Músculo)"></div>
+                                        <div class="col-6"><input type="number" step="0.01" name="agb"
+                                                class="form-control" placeholder="AGB (Gordura)"></div>
                                     </div>
 
-                                    <h6 class="text-primary border-bottom pb-2 mb-3 mt-3 fw-bold" style="font-size: 0.85rem;">Circunferências (cm)</h6>
+                                    <h6 class="text-primary border-bottom pb-2 mb-3 mt-3 fw-bold"
+                                        style="font-size: 0.85rem;">Circunferências (cm)</h6>
                                     <div class="row g-2 mb-2">
-                                        <div class="col-6"><input type="number" step="0.1" name="ombro" class="form-control" placeholder="Ombro"></div>
-                                        <div class="col-6"><input type="number" step="0.1" name="peitoral" class="form-control" placeholder="Peitoral"></div>
+                                        <div class="col-6"><input type="number" step="0.1" name="ombro"
+                                                class="form-control" placeholder="Ombro"></div>
+                                        <div class="col-6"><input type="number" step="0.1" name="peitoral"
+                                                class="form-control" placeholder="Peitoral"></div>
                                     </div>
                                     <div class="row g-2 mb-2">
-                                        <div class="col-4"><input type="number" step="0.1" name="cintura" class="form-control" placeholder="Cintura"></div>
-                                        <div class="col-4"><input type="number" step="0.1" name="abdomen" class="form-control" placeholder="Abdomen"></div>
-                                        <div class="col-4"><input type="number" step="0.1" name="quadril" class="form-control" placeholder="Quadril"></div>
+                                        <div class="col-4"><input type="number" step="0.1" name="cintura"
+                                                class="form-control" placeholder="Cintura"></div>
+                                        <div class="col-4"><input type="number" step="0.1" name="abdomen"
+                                                class="form-control" placeholder="Abdomen"></div>
+                                        <div class="col-4"><input type="number" step="0.1" name="quadril"
+                                                class="form-control" placeholder="Quadril"></div>
                                     </div>
-                                    
                                     <p class="small text-muted fw-bold mt-3 mb-1">Braço Relaxado</p>
                                     <div class="row g-2 mb-2">
-                                        <div class="col-6"><input type="number" step="0.1" name="braco_rel_dir" class="form-control" placeholder="Direito"></div>
-                                        <div class="col-6"><input type="number" step="0.1" name="braco_rel_esq" class="form-control" placeholder="Esquerdo"></div>
+                                        <div class="col-6"><input type="number" step="0.1" name="braco_rel_dir"
+                                                class="form-control" placeholder="Direito"></div>
+                                        <div class="col-6"><input type="number" step="0.1" name="braco_rel_esq"
+                                                class="form-control" placeholder="Esquerdo"></div>
                                     </div>
-                                    
                                     <p class="small text-muted fw-bold mt-2 mb-1">Braço Contraído</p>
                                     <div class="row g-2 mb-3">
-                                        <div class="col-6"><input type="number" step="0.1" name="braco_con_dir" class="form-control" placeholder="Direito"></div>
-                                        <div class="col-6"><input type="number" step="0.1" name="braco_con_esq" class="form-control" placeholder="Esquerdo"></div>
+                                        <div class="col-6"><input type="number" step="0.1" name="braco_con_dir"
+                                                class="form-control" placeholder="Direito"></div>
+                                        <div class="col-6"><input type="number" step="0.1" name="braco_con_esq"
+                                                class="form-control" placeholder="Esquerdo"></div>
                                     </div>
 
-                                    <h6 class="text-primary border-bottom pb-2 mb-3 mt-3 fw-bold" style="font-size: 0.85rem;">Dobras Cutâneas (mm)</h6>
+                                    <h6 class="text-primary border-bottom pb-2 mb-3 mt-3 fw-bold"
+                                        style="font-size: 0.85rem;">Dobras Cutâneas (mm)</h6>
                                     <div class="row g-2 mb-2">
-                                        <div class="col-6"><input type="number" step="0.1" name="dobra_triceps" class="form-control" placeholder="Tríceps"></div>
-                                        <div class="col-6"><input type="number" step="0.1" name="dobra_axilar_media" class="form-control" placeholder="Axilar Média"></div>
+                                        <div class="col-6"><input type="number" step="0.1" name="dobra_triceps"
+                                                class="form-control" placeholder="Tríceps"></div>
+                                        <div class="col-6"><input type="number" step="0.1" name="dobra_axilar_media"
+                                                class="form-control" placeholder="Axilar Média"></div>
                                     </div>
                                     <div class="row g-2 mb-2">
-                                        <div class="col-6"><input type="number" step="0.1" name="dobra_torax" class="form-control" placeholder="Tórax"></div>
-                                        <div class="col-6"><input type="number" step="0.1" name="dobra_abdominal" class="form-control" placeholder="Abdominal"></div>
+                                        <div class="col-6"><input type="number" step="0.1" name="dobra_torax"
+                                                class="form-control" placeholder="Tórax"></div>
+                                        <div class="col-6"><input type="number" step="0.1" name="dobra_abdominal"
+                                                class="form-control" placeholder="Abdominal"></div>
                                     </div>
                                     <div class="row g-2 mb-2">
-                                        <div class="col-6"><input type="number" step="0.1" name="dobra_suprailiaca" class="form-control" placeholder="Suprailíaca"></div>
-                                        <div class="col-6"><input type="number" step="0.1" name="dobra_subescapular" class="form-control" placeholder="Subescapular"></div>
+                                        <div class="col-6"><input type="number" step="0.1" name="dobra_suprailiaca"
+                                                class="form-control" placeholder="Suprailíaca"></div>
+                                        <div class="col-6"><input type="number" step="0.1" name="dobra_subescapular"
+                                                class="form-control" placeholder="Subescapular"></div>
                                     </div>
                                     <div class="row g-2 mb-2">
-                                        <div class="col-6"><input type="number" step="0.1" name="dobra_coxa" class="form-control" placeholder="Coxa"></div>
+                                        <div class="col-6"><input type="number" step="0.1" name="dobra_coxa"
+                                                class="form-control" placeholder="Coxa"></div>
                                     </div>
                                 </div>
 
@@ -253,32 +285,27 @@
                                 <div class="row g-3 mb-4">
                                     <div class="col-md-4">
                                         <div class="card p-3 d-flex flex-row align-items-center gap-3">
-                                            <div class="icon-shape bg-light text-success">
-                                                <i class="fas fa-arrow-up"></i>
-                                            </div>
+                                            <div class="icon-shape bg-light text-success"><i
+                                                    class="fas fa-arrow-up"></i></div>
                                             <div>
                                                 <p class="small text-muted mb-0">Entradas</p>
                                                 <h4 class="fw-bold mb-0" id="fin-ganho">R$ 0</h4>
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="col-md-4">
                                         <div class="card p-3 d-flex flex-row align-items-center gap-3">
-                                            <div class="icon-shape bg-light text-danger">
-                                                <i class="fas fa-arrow-down"></i>
-                                            </div>
+                                            <div class="icon-shape bg-light text-danger"><i
+                                                    class="fas fa-arrow-down"></i></div>
                                             <div>
                                                 <p class="small text-muted mb-0">Saídas</p>
                                                 <h4 class="fw-bold mb-0" id="fin-gasto">R$ 0</h4>
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="col-md-4">
                                         <div class="card p-3 d-flex flex-row align-items-center gap-3">
-                                            <div class="icon-shape bg-light text-primary">
-                                                <i class="fas fa-wallet"></i>
+                                            <div class="icon-shape bg-light text-primary"><i class="fas fa-wallet"></i>
                                             </div>
                                             <div>
                                                 <p class="small text-muted mb-0">Lucro</p>
@@ -291,9 +318,8 @@
                                 <div class="card p-3 mb-4">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="d-flex align-items-center gap-3">
-                                            <div class="icon-shape bg-warning bg-opacity-10 text-warning">
-                                                <i class="fas fa-piggy-bank"></i>
-                                            </div>
+                                            <div class="icon-shape bg-warning bg-opacity-10 text-warning"><i
+                                                    class="fas fa-piggy-bank"></i></div>
                                             <div>
                                                 <h5 class="fw-bold mb-0 text-warning">Poupança</h5>
                                                 <small class="text-muted">Acumulado no mês</small>
@@ -322,7 +348,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="tab-trabalho">
+
+                            <div class="tab-pane fade" id="tab-trabalho" style="display: none;">
                                 <div class="row g-3 mb-4">
                                     <div class="col-md-6">
                                         <div class="card p-4">
@@ -377,7 +404,8 @@
                                 <div class="card p-4">
                                     <h6 class="fw-bold mb-3">Histórico Detalhado</h6>
                                     <div class="table-responsive">
-                                        <table class="table align-middle text-center" style="font-size: 0.85rem; white-space: nowrap;">
+                                        <table class="table align-middle text-center"
+                                            style="font-size: 0.85rem; white-space: nowrap;">
                                             <thead>
                                                 <tr>
                                                     <th>Data</th>
