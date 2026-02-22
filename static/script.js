@@ -173,59 +173,127 @@ async function carregarDados() {
     const ano = new Date().getFullYear();
 
     // 1. Financeiro
-    const resFin = await fetch(`/financeiro/dados?mes=${mes}&ano=${ano}&user_id=${usuarioLogadoId}`);
-    const dadosFin = await resFin.json();
-    document.getElementById('fin-ganho').innerText = formatarMoeda(dadosFin.ganho);
-    document.getElementById('fin-gasto').innerText = formatarMoeda(dadosFin.gasto);
-    document.getElementById('fin-lucro').innerText = formatarMoeda(dadosFin.lucro);
-    document.getElementById('fin-poupanca').innerText = formatarMoeda(dadosFin.poupanca);
+    try {
+        const resFin = await fetch(`/financeiro/dados?mes=${mes}&ano=${ano}&user_id=${usuarioLogadoId}`);
+        const dadosFin = await resFin.json();
+        
+        document.getElementById('fin-ganho').innerText = formatarMoeda(dadosFin.ganho || 0);
+        document.getElementById('fin-gasto').innerText = formatarMoeda(dadosFin.gasto || 0);
+        document.getElementById('fin-lucro').innerText = formatarMoeda(dadosFin.lucro || 0);
+        document.getElementById('fin-poupanca').innerText = formatarMoeda(dadosFin.poupanca || 0);
 
-    const resFinAnual = await fetch(`/financeiro/anual?ano=${ano}&user_id=${usuarioLogadoId}`);
-    const dadosFinAnual = await resFinAnual.json();
-    const tabelaFinBody = document.getElementById('tabela-financeiro-anual');
-    if (tabelaFinBody) {
-        tabelaFinBody.innerHTML = '';
-        for (const [categoria, meses] of Object.entries(dadosFinAnual)) {
-            let total = 0;
-            let linha = `<tr><td class="text-start ps-3 fw-bold text-muted">${categoria}</td>`;
-            for (let m = 1; m <= 12; m++) {
-                let v = meses[m] || 0;
-                total += v;
-                linha += `<td>${v > 0 ? v.toLocaleString('pt-BR') : '-'}</td>`;
+        // --- TABELA DO MÊS COM PROTEÇÃO ---
+        const tabelaMesBody = document.getElementById('tabela-mes-financeiro');
+        if (tabelaMesBody) {
+            tabelaMesBody.innerHTML = '';
+            // Verificação dupla: garante que a lista existe antes de tentar ler o .length
+            if (!dadosFin.lista || dadosFin.lista.length === 0) {
+                tabelaMesBody.innerHTML = '<tr><td colspan="6" class="text-muted py-3">Nenhum lançamento neste mês.</td></tr>';
+            } else {
+                dadosFin.lista.forEach(item => {
+                    let badgeClass = item.tipo === 'Entrada' ? 'bg-success' : (item.tipo === 'Poupanca' ? 'bg-warning' : 'bg-danger');
+                    tabelaMesBody.innerHTML += `
+                        <tr>
+                            <td class="text-start text-muted">${item.data_formatada}</td>
+                            <td class="text-start fw-bold">${item.descricao}</td>
+                            <td><span class="badge bg-light text-dark border">${item.categoria}</span></td>
+                            <td><span class="badge ${badgeClass}">${item.tipo}</span></td>
+                            <td class="text-end fw-bold">${formatarMoeda(item.valor)}</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary rounded-circle" 
+                                    onclick="abrirModalEditFin(${item.id}, '${item.data}', '${item.descricao}', ${item.valor}, '${item.tipo}', '${item.categoria}')">
+                                    <i class="fas fa-pen"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
             }
-            linha += `<td class="fw-bold border-start bg-light">${total.toLocaleString('pt-BR')}</td></tr>`;
-            tabelaFinBody.innerHTML += linha;
         }
+    } catch (error) {
+        console.error("Erro ao carregar dados financeiros:", error);
     }
+
+    try {
+        const resFinAnual = await fetch(`/financeiro/anual?ano=${ano}&user_id=${usuarioLogadoId}`);
+        const dadosFinAnual = await resFinAnual.json();
+        const tabelaFinBody = document.getElementById('tabela-financeiro-anual');
+        if (tabelaFinBody) {
+            tabelaFinBody.innerHTML = '';
+            for (const [categoria, meses] of Object.entries(dadosFinAnual)) {
+                let total = 0;
+                let linha = `<tr><td class="text-start ps-3 fw-bold text-muted">${categoria}</td>`;
+                for (let m = 1; m <= 12; m++) {
+                    let v = meses[m] || 0;
+                    total += v;
+                    linha += `<td>${v > 0 ? v.toLocaleString('pt-BR') : '-'}</td>`;
+                }
+                linha += `<td class="fw-bold border-start bg-light">${total.toLocaleString('pt-BR')}</td></tr>`;
+                tabelaFinBody.innerHTML += linha;
+            }
+        }
+    } catch(e) { console.error("Erro financeiro anual:", e); }
 
     // 2. Trabalho 
     if (usuarioLogadoId === MEU_ID_AUTORIZADO) {
-        const resTrab = await fetch(`/trabalho/dados?mes=${mes}&ano=${ano}&user_id=${usuarioLogadoId}`);
-        const dTr = await resTrab.json();
-        document.getElementById('trab-total').innerText = dTr.total_horas;
-        document.getElementById('trab-extra').innerText = dTr.extras;
-        document.getElementById('trab-salario').innerText = formatarMoeda(dTr.salario);
-        if(document.getElementById('trab-valor-extra')) document.getElementById('trab-valor-extra').innerText = formatarMoeda(dTr.valor_extra);
+        try {
+            const resTrab = await fetch(`/trabalho/dados?mes=${mes}&ano=${ano}&user_id=${usuarioLogadoId}`);
+            const dTr = await resTrab.json();
+            document.getElementById('trab-total').innerText = dTr.total_horas;
+            document.getElementById('trab-extra').innerText = dTr.extras;
+            document.getElementById('trab-salario').innerText = formatarMoeda(dTr.salario);
+            if(document.getElementById('trab-valor-extra')) document.getElementById('trab-valor-extra').innerText = formatarMoeda(dTr.valor_extra);
 
-        const resAnualTrab = await fetch(`/trabalho/anual?ano=${ano}&user_id=${usuarioLogadoId}`);
-        const dAnTr = await resAnualTrab.json();
-        const tabelaBody = document.getElementById('tabela-trabalho-anual');
-        if (tabelaBody) {
-            tabelaBody.innerHTML = '';
-            const nomesMeses = ["", "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
-            for (let m = 1; m <= 12; m++) {
-                const d = dAnTr[m];
-                if (d && d.total > 0) {
-                    tabelaBody.innerHTML += `<tr><td class="text-start">${nomesMeses[m]}</td><td>${d.total}h</td><td>${d.extra}h</td><td>${d.normal}h</td></tr>`;
+            // --- TABELA DO MÊS TRABALHO COM PROTEÇÃO ---
+            const tabelaMesTrabBody = document.getElementById('tabela-mes-trabalho');
+            if (tabelaMesTrabBody) {
+                tabelaMesTrabBody.innerHTML = '';
+                if (!dTr.lista || dTr.lista.length === 0) {
+                    tabelaMesTrabBody.innerHTML = '<tr><td colspan="5" class="text-muted py-3">Nenhum registro neste mês.</td></tr>';
+                } else {
+                    dTr.lista.forEach(item => {
+                        let badgeClass = item.tipo === 'Extra' ? 'bg-warning text-dark' : 'bg-secondary';
+                        tabelaMesTrabBody.innerHTML += `
+                            <tr>
+                                <td class="text-start text-muted">${item.data_formatada}</td>
+                                <td class="text-start fw-bold">${item.projeto}</td>
+                                <td><span class="badge ${badgeClass}">${item.tipo}</span></td>
+                                <td class="fw-bold">${item.qtd_horas}h</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary rounded-circle" 
+                                        onclick="abrirModalEditTrab(${item.id}, '${item.data}', ${item.qtd_horas}, '${item.projeto}', '${item.tipo}')">
+                                        <i class="fas fa-pen"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    });
                 }
             }
-        }
+            // -------------------------------------------
+
+            const resAnualTrab = await fetch(`/trabalho/anual?ano=${ano}&user_id=${usuarioLogadoId}`);
+            const dAnTr = await resAnualTrab.json();
+            const tabelaBody = document.getElementById('tabela-trabalho-anual');
+            if (tabelaBody) {
+                tabelaBody.innerHTML = '';
+                const nomesMeses = ["", "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+                for (let m = 1; m <= 12; m++) {
+                    const d = dAnTr[m];
+                    if (d && d.total > 0) {
+                        tabelaBody.innerHTML += `<tr><td class="text-start">${nomesMeses[m]}</td><td>${d.total}h</td><td>${d.extra}h</td><td>${d.normal}h</td></tr>`;
+                    }
+                }
+            }
+        } catch(e) { console.error("Erro trabalho:", e); }
     }
 
     // 3. Físico
-    const resFis = await fetch(`/fisico/dados?user_id=${usuarioLogadoId}`);
-    const dadosFis = await resFis.json();
-    atualizarGrafico(dadosFis);
+    try {
+        const resFis = await fetch(`/fisico/dados?user_id=${usuarioLogadoId}`);
+        const dadosFis = await resFis.json();
+        atualizarGrafico(dadosFis);
+    } catch(e) { console.error("Erro físico:", e); }
 }
 
 async function enviarFormulario(event) {
@@ -279,7 +347,7 @@ async function enviarFormulario(event) {
             form.reset();
             document.getElementById('campo-data').value = new Date().toISOString().split('T')[0];
             
-            // MUDANÇA: Limpando explicitamente o campo da data final após salvar
+            // Limpando explicitamente o campo da data final após salvar
             const campoDataFim = document.getElementById('campo-data-fim');
             if (campoDataFim) {
                 campoDataFim.value = '';
@@ -298,6 +366,10 @@ function atualizarGrafico(dados) {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (meuGrafico) meuGrafico.destroy();
+    
+    // Se não tiver dados, não quebra o gráfico
+    if(!dados || dados.length === 0) return;
+
     meuGrafico = new Chart(ctx, {
         type: 'line',
         data: {
@@ -310,3 +382,112 @@ function atualizarGrafico(dados) {
         options: { maintainAspectRatio: false }
     });
 }
+
+// ==========================================
+// MÓDULO DE EDIÇÃO FINANCEIRA
+// ==========================================
+let modalEditFinObj = null;
+
+function abrirModalEditFin(id, data, desc, valor, tipo, cat) {
+    document.getElementById('edit-fin-id').value = id;
+    document.getElementById('edit-fin-data').value = data;
+    document.getElementById('edit-fin-desc').value = desc;
+    document.getElementById('edit-fin-valor').value = valor;
+    document.getElementById('edit-fin-tipo').value = tipo;
+    document.getElementById('edit-fin-cat').value = cat;
+
+    if (!modalEditFinObj) {
+        modalEditFinObj = new bootstrap.bootstrap.Modal(document.getElementById('modalEditFin'));
+    }
+    modalEditFinObj.show();
+}
+
+async function salvarEdicaoFin() {
+    const id = document.getElementById('edit-fin-id').value;
+    const formData = new FormData();
+    formData.append('user_id', usuarioLogadoId);
+    formData.append('data', document.getElementById('edit-fin-data').value);
+    formData.append('descricao', document.getElementById('edit-fin-desc').value);
+    formData.append('valor', document.getElementById('edit-fin-valor').value);
+    formData.append('tipo', document.getElementById('edit-fin-tipo').value);
+    formData.append('cat_fin', document.getElementById('edit-fin-cat').value);
+
+    try {
+        const res = await fetch(`/financeiro/atualizar/${id}`, { method: 'PUT', body: formData });
+        if (!res.ok) throw new Error('Erro ao atualizar');
+        
+        modalEditFinObj.hide();
+        carregarDados(); // Atualiza a tela na hora!
+    } catch (e) {
+        alert("Erro ao salvar edição.");
+    }
+}
+
+async function excluirFin() {
+    const id = document.getElementById('edit-fin-id').value;
+    if (!confirm("Tem certeza que deseja excluir este lançamento?")) return;
+
+    try {
+        const res = await fetch(`/financeiro/excluir/${id}?user_id=${usuarioLogadoId}`, { method: 'DELETE' });
+        if (!res.ok) throw new Error('Erro ao excluir');
+        
+        modalEditFinObj.hide();
+        carregarDados(); 
+    } catch (e) {
+        alert("Erro ao excluir lançamento.");
+    }
+}
+
+// ==========================================
+// MÓDULO DE EDIÇÃO TRABALHO
+// ==========================================
+let modalEditTrabObj = null;
+
+function abrirModalEditTrab(id, data, horas, proj, tipo) {
+    document.getElementById('edit-trab-id').value = id;
+    document.getElementById('edit-trab-data').value = data;
+    document.getElementById('edit-trab-horas').value = horas;
+    document.getElementById('edit-trab-proj').value = proj;
+    document.getElementById('edit-trab-tipo').value = tipo;
+
+    if (!modalEditTrabObj) {
+        modalEditTrabObj = new bootstrap.Modal(document.getElementById('modalEditTrab'));
+    }
+    modalEditTrabObj.show();
+}
+
+async function salvarEdicaoTrab() {
+    const id = document.getElementById('edit-trab-id').value;
+    const formData = new FormData();
+    formData.append('user_id', usuarioLogadoId);
+    formData.append('data', document.getElementById('edit-trab-data').value);
+    formData.append('qtd_horas', document.getElementById('edit-trab-horas').value);
+    formData.append('projeto', document.getElementById('edit-trab-proj').value);
+    formData.append('tipo', document.getElementById('edit-trab-tipo').value);
+
+    try {
+        const res = await fetch(`/trabalho/atualizar/${id}`, { method: 'PUT', body: formData });
+        if (!res.ok) throw new Error('Erro ao atualizar trabalho');
+        
+        modalEditTrabObj.hide();
+        carregarDados(); 
+    } catch (e) {
+        alert("Erro ao salvar edição.");
+    }
+}
+
+async function excluirTrab() {
+    const id = document.getElementById('edit-trab-id').value;
+    if (!confirm("Tem certeza que deseja excluir estas horas?")) return;
+
+    try {
+        const res = await fetch(`/trabalho/excluir/${id}?user_id=${usuarioLogadoId}`, { method: 'DELETE' });
+        if (!res.ok) throw new Error('Erro ao excluir trabalho');
+        
+        modalEditTrabObj.hide();
+        carregarDados(); 
+    } catch (e) {
+        alert("Erro ao excluir lançamento.");
+    }
+}
+
