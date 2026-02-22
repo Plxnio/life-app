@@ -18,7 +18,7 @@
         <div class="card p-5 text-center shadow border-0" style="width: 380px; background: white;">
             <div class="mb-4">
                 <div class="bg-light rounded-circle d-inline-flex p-3">
-                    <i class="fas fa-fingerprint text-primary fs-2"></i>
+                    <i class="fas fa-fingerprint text-azul fs-2"></i>
                 </div>
             </div>
             <h4 class="fw-bold mb-1">Bem-vindo</h4>
@@ -29,7 +29,7 @@
 
             <button onclick="loginEmail()" class="btn btn-primary w-100 mb-2">Entrar</button>
             <button onclick="cadastrarEmail()" class="btn btn-outline-primary w-100 mb-3">Criar Cadastro</button>
-            <p id="erro-login" class="text-danger mt-3 small d-none"></p>
+            <p id="erro-login" class="text-vermelho mt-3 small d-none"></p>
         </div>
     </div>
 
@@ -37,7 +37,7 @@
         <div class="row vh-100">
 
             <div class="col-12 col-md-3 col-lg-2 sidebar-container d-flex flex-column py-4 px-3">
-                <h4 class="fw-bold text-primary mb-4 px-2 text-center text-md-start">
+                <h4 class="fw-bold text-azul mb-4 px-2 text-center text-md-start">
                     <i class="fas fa-shapes me-2"></i>Life App
                 </h4>
 
@@ -54,7 +54,7 @@
                 </div>
 
                 <div class="mt-auto px-2 d-none d-md-block">
-                    <button class="btn btn-sm text-danger w-100" onclick="fazerLogout()">
+                    <button class="btn btn-sm text-vermelho w-100" onclick="fazerLogout()">
                         <i class="fas fa-sign-out-alt me-2"></i>Sair
                     </button>
                 </div>
@@ -70,7 +70,7 @@
                     <div class="d-flex align-items-center gap-3">
                         <div class="bg-white p-1 rounded-pill shadow-sm d-flex align-items-center px-3" style="height: 45px;">
                             <i class="fas fa-filter text-muted me-2 small"></i>
-                            <select id="filtro-mes" class="form-select border-0 bg-transparent py-0 fw-bold text-primary" style="width: auto; box-shadow: none;" onchange="carregarDados()">
+                            <select id="filtro-mes" class="form-select border-0 bg-transparent py-0 fw-bold text-azul" style="width: auto; box-shadow: none;" onchange="carregarDados()">
                                 <option value="1">Janeiro</option>
                                 <option value="2">Fevereiro</option>
                                 <option value="3">Março</option>
@@ -84,9 +84,6 @@
                                 <option value="11">Novembro</option>
                                 <option value="12">Dezembro</option>
                             </select>
-                        </div>
-                        <div class="bg-white px-4 py-2 rounded-pill shadow-sm text-primary fw-bold small d-none d-sm-block" style="height: 45px; display: flex; align-items: center;">
-                            <i class="far fa-calendar me-2"></i> Hoje
                         </div>
                     </div>
                 </div>
@@ -158,7 +155,7 @@
                                 </div>
 
                                 <div id="campos-fis" class="fade-in" style="display:none;">
-                                    <h6 class="text-primary border-bottom pb-2 mb-3 mt-1 fw-bold" style="font-size: 0.85rem;">Geral / Composição</h6>
+                                    <h6 class="text-azul border-bottom pb-2 mb-3 mt-1 fw-bold" style="font-size: 0.85rem;">Geral / Composição</h6>
                                     <div class="row g-2 mb-2">
                                         <div class="col-6"><input type="number" step="0.01" name="peso" class="form-control border border-primary shadow-sm" placeholder="Peso (kg) *" required></div>
                                         <div class="col-6"><input type="number" step="0.01" name="altura" class="form-control" placeholder="Altura (m)"></div>
@@ -184,7 +181,7 @@
                                         <div class="col-6"><input type="number" step="0.01" name="agb" class="form-control" placeholder="AGB (Gordura)"></div>
                                     </div>
 
-                                    <h6 class="text-primary border-bottom pb-2 mb-3 mt-3 fw-bold" style="font-size: 0.85rem;">Circunferências (cm)</h6>
+                                    <h6 class="text-azul border-bottom pb-2 mb-3 mt-3 fw-bold" style="font-size: 0.85rem;">Circunferências (cm)</h6>
                                     <div class="row g-2 mb-2">
                                         <div class="col-6"><input type="number" step="0.1" name="ombro" class="form-control" placeholder="Ombro"></div>
                                         <div class="col-6"><input type="number" step="0.1" name="peitoral" class="form-control" placeholder="Peitoral"></div>
@@ -205,7 +202,7 @@
                                         <div class="col-6"><input type="number" step="0.1" name="braco_con_esq" class="form-control" placeholder="Esquerdo"></div>
                                     </div>
 
-                                    <h6 class="text-primary border-bottom pb-2 mb-3 mt-3 fw-bold" style="font-size: 0.85rem;">Dobras Cutâneas (mm)</h6>
+                                    <h6 class="text-azul border-bottom pb-2 mb-3 mt-3 fw-bold" style="font-size: 0.85rem;">Dobras Cutâneas (mm)</h6>
                                     <div class="row g-2 mb-2">
                                         <div class="col-6"><input type="number" step="0.1" name="dobra_triceps" class="form-control" placeholder="Tríceps"></div>
                                         <div class="col-6"><input type="number" step="0.1" name="dobra_axilar_media" class="form-control" placeholder="Axilar Média"></div>
@@ -235,28 +232,28 @@
                                 <div class="row g-3 mb-4">
                                     <div class="col-md-4">
                                         <div class="card p-3 d-flex flex-row align-items-center gap-3">
-                                            <div class="icon-shape bg-light text-success"><i class="fas fa-arrow-up"></i></div>
+                                            <div class="icon-shape bg-light text-verde"><i class="fas fa-arrow-up"></i></div>
                                             <div>
                                                 <p class="small text-muted mb-0">Entradas</p>
-                                                <h4 class="fw-bold mb-0" id="fin-ganho">R$ 0</h4>
+                                                <h4 class="fw-bold mb-0 text-verde" id="fin-ganho">R$ 0</h4>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="card p-3 d-flex flex-row align-items-center gap-3">
-                                            <div class="icon-shape bg-light text-danger"><i class="fas fa-arrow-down"></i></div>
+                                            <div class="icon-shape bg-light text-vermelho"><i class="fas fa-arrow-down"></i></div>
                                             <div>
                                                 <p class="small text-muted mb-0">Saídas</p>
-                                                <h4 class="fw-bold mb-0" id="fin-gasto">R$ 0</h4>
+                                                <h4 class="fw-bold mb-0 text-vermelho" id="fin-gasto">R$ 0</h4>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="card p-3 d-flex flex-row align-items-center gap-3">
-                                            <div class="icon-shape bg-light text-primary"><i class="fas fa-wallet"></i></div>
+                                            <div class="icon-shape bg-light text-azul"><i class="fas fa-wallet"></i></div>
                                             <div>
                                                 <p class="small text-muted mb-0">Lucro</p>
-                                                <h4 class="fw-bold mb-0" id="fin-lucro">R$ 0</h4>
+                                                <h4 class="fw-bold mb-0 text-azul" id="fin-lucro">R$ 0</h4>
                                             </div>
                                         </div>
                                     </div>
@@ -334,13 +331,13 @@
                                     <div class="col-md-6">
                                         <div class="card p-4">
                                             <p class="small text-muted fw-bold mb-1">PREVISÃO (BRUTO)</p>
-                                            <h2 class="fw-bold text-primary mb-0" id="trab-salario">R$ 0,00</h2>
+                                            <h2 class="fw-bold text-azul mb-0" id="trab-salario">R$ 0,00</h2>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="card p-4">
                                             <p class="small text-muted fw-bold mb-1">VINDO DE EXTRAS</p>
-                                            <h2 class="fw-bold text-success mb-0" id="trab-valor-extra">R$ 0,00</h2>
+                                            <h2 class="fw-bold text-verde mb-0" id="trab-valor-extra">R$ 0,00</h2>
                                         </div>
                                     </div>
                                 </div>
@@ -353,7 +350,7 @@
                                     </div>
                                     <div class="col-6">
                                         <div class="card p-3 text-center">
-                                            <h3 class="fw-bold text-success mb-0" id="trab-extra">0</h3>
+                                            <h3 class="fw-bold text-verde mb-0" id="trab-extra">0</h3>
                                             <small class="text-muted">Horas Extras</small>
                                         </div>
                                     </div>
@@ -446,7 +443,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg">
                 <div class="modal-header bg-light border-0">
-                    <h5 class="modal-title fw-bold text-primary"><i class="fas fa-edit me-2"></i>Editar Lançamento</h5>
+                    <h5 class="modal-title fw-bold text-azul"><i class="fas fa-edit me-2"></i>Editar Lançamento</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-4">
@@ -499,7 +496,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg">
                 <div class="modal-header bg-light border-0">
-                    <h5 class="modal-title fw-bold text-primary"><i class="fas fa-edit me-2"></i>Editar Horas</h5>
+                    <h5 class="modal-title fw-bold text-azul"><i class="fas fa-edit me-2"></i>Editar Horas</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-4">

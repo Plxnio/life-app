@@ -3,7 +3,7 @@
 :root {
     --bg-body: #F4F7FE;
     --bg-card: #FFFFFF;
-    --primary: #4318FF;
+    --primary: #355C7D;
     --secondary-text: #A3AED0;
     --main-text: #2B3674;
     --radius: 20px;
@@ -79,7 +79,8 @@ body {
     transition: all 0.2s;
 }
 
-.form-control, .form-select {
+.form-control,
+.form-select {
     background-color: #F4F7FE !important;
     border: none !important;
     border-radius: 12px !important;
@@ -88,7 +89,8 @@ body {
     font-weight: 500;
 }
 
-.form-control:focus, .form-select:focus {
+.form-control:focus,
+.form-select:focus {
     box-shadow: 0 0 0 2px var(--primary);
     background-color: #fff !important;
 }
@@ -110,9 +112,17 @@ body {
     vertical-align: middle;
 }
 
-.text-primary { color: var(--primary) !important; }
-.text-muted { color: var(--secondary-text) !important; }
-.fw-bold { font-weight: 700 !important; }
+.text-primary {
+    color: var(--primary) !important;
+}
+
+.text-muted {
+    color: var(--secondary-text) !important;
+}
+
+.fw-bold {
+    font-weight: 700 !important;
+}
 
 .btn-primary {
     background-color: var(--primary);
@@ -124,29 +134,46 @@ body {
 }
 
 .btn-primary:hover {
-    background-color: #3311db;
+    background-color: #20374b;
     transform: translateY(-2px);
 }
 
 /* Scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-thumb { background: #E0E5F2; border-radius: 10px; }
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #E0E5F2;
+    border-radius: 10px;
+}
 
 @media (max-width: 991px) {
-    body, html, .overflow-hidden {
+
+    body,
+    html,
+    .overflow-hidden {
         overflow: auto !important;
         height: auto !important;
     }
+
     .sidebar-container {
         height: auto !important;
         padding-bottom: 0 !important;
     }
-    .nav-btn { padding: 12px 15px; }
+
+    .nav-btn {
+        padding: 12px 15px;
+    }
+
     #dashboard .row {
         margin-right: 0;
         margin-left: 0;
     }
-    .p-4 { padding: 1.5rem 1rem !important; }
+
+    .p-4 {
+        padding: 1.5rem 1rem !important;
+    }
 }
 
 .icon-shape {
@@ -156,11 +183,35 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.25rem; 
-    flex-shrink: 0; 
+    font-size: 1.25rem;
+    flex-shrink: 0;
 }
 
 /* Cores da Poupança */
-.text-roxo { color: #8A2BE2 !important; }
-.bg-roxo { background-color: #8A2BE2 !important; color: white !important; }
-.bg-roxo-claro { background-color: rgba(138, 43, 226, 0.15) !important; }
+.text-roxo {
+    color: #836299;
+}
+
+.bg-roxo {
+    background-color: #836299;
+    color: white;
+}
+
+.bg-roxo-claro {
+    background-color: rgba(138, 43, 226, 0.15);
+}
+
+/* Verde */
+.text-verde {
+    color: #2F6F4E;
+}
+
+/* Vermelho */
+.text-vermelho {
+    color: #9F3A38;
+}
+
+/* Azul */
+.text-azul {
+    color: #355C7D;
+}
