@@ -266,7 +266,38 @@ async function carregarDados() {
     try {
         const resFis = await fetch(`/fisico/dados?user_id=${usuarioLogadoId}`);
         const dadosFis = await resFis.json();
-        atualizarGrafico(dadosFis);
+        
+        atualizarGrafico(dadosFis); // Atualiza o gráfico
+
+        // --- NOVO: Preenche a Tabela de Histórico ---
+        const tabelaFisicoBody = document.getElementById('tabela-fisico-historico');
+        if (tabelaFisicoBody) {
+            tabelaFisicoBody.innerHTML = '';
+            
+            if (!dadosFis || dadosFis.length === 0) {
+                tabelaFisicoBody.innerHTML = '<tr><td colspan="8" class="text-muted py-3">Nenhum registro encontrado.</td></tr>';
+            } else {
+                // Inverte a lista para a tabela mostrar a medição mais recente no topo
+                [...dadosFis].reverse().forEach(item => {
+                    let evolucaoHTML = `<span class="text-muted">0 kg</span>`;
+                    if (item.evolucao > 0) evolucaoHTML = `<span class="text-danger fw-bold">+${item.evolucao} kg</span>`; // Ganhou peso
+                    if (item.evolucao < 0) evolucaoHTML = `<span class="text-success fw-bold">${item.evolucao} kg</span>`;  // Perdeu peso
+
+                    tabelaFisicoBody.innerHTML += `
+                        <tr>
+                            <td class="text-muted">${item.data}</td>
+                            <td class="fw-bold">${item.peso} kg</td>
+                            <td>${evolucaoHTML}</td>
+                            <td>${item.imc}</td>
+                            <td>${item.gordura !== '-' ? item.gordura + '%' : '-'}</td>
+                            <td>${item.massa_gorda_kg !== '-' ? item.massa_gorda_kg + ' kg' : '-'}</td>
+                            <td>${item.massa_magra !== '-' ? item.massa_magra + '%' : '-'}</td>
+                            <td>${item.cintura !== '-' ? item.cintura + ' cm' : '-'}</td>
+                        </tr>
+                    `;
+                });
+            }
+        }
     } catch(e) { console.error("Erro Físico:", e); }
 }
 

@@ -8,17 +8,31 @@ router = APIRouter(prefix="/fisico", tags=["Fisico"])
 
 @router.get("/dados")
 def ler_fisico(user_id: str, db: Session = Depends(get_db)):
+    # Pega as medidas ordenadas da mais antiga para a mais nova (para o gráfico funcionar bem)
     medidas = db.query(Fisico).filter(Fisico.user_id == user_id).order_by(Fisico.data).all()
-    return [{
-        "data": m.data.strftime("%d/%m/%Y"),
-        "peso": m.peso,
-        "imc": m.imc,
-        "gordura": m.massa_gorda_perc,
-        "massa_gorda_kg": m.massa_gorda_kg, 
-        "massa_magra": m.massa_magra_perc,
-        "cintura": m.cintura,
-        "abdomen": m.abdomen
-    } for m in medidas]
+    
+    historico = []
+    peso_anterior = None
+    
+    for m in medidas:
+        # Calcula a evolução (diferença de peso)
+        evolucao = 0.0
+        if peso_anterior is not None:
+            evolucao = round(m.peso - peso_anterior, 2)
+        peso_anterior = m.peso
+        
+        historico.append({
+            "data": m.data.strftime("%d/%m/%Y"),
+            "peso": m.peso,
+            "evolucao": evolucao,
+            "imc": round(m.imc, 2) if m.imc else "-",
+            "gordura": m.massa_gorda_perc if m.massa_gorda_perc else "-",
+            "massa_gorda_kg": m.massa_gorda_kg if m.massa_gorda_kg else "-", 
+            "massa_magra": m.massa_magra_perc if m.massa_magra_perc else "-",
+            "cintura": m.cintura if m.cintura else "-"
+        })
+        
+    return historico
 
 @router.post("/salvar")
 def salvar_fisico(
