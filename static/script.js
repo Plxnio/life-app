@@ -148,13 +148,9 @@ function mudarAbaCadastro(tipo, botaoClicado) {
 
 // --- INTEGRAÇÃO COM BACKEND ---
 async function carregarDados() {
-    const mes = document.getElementById("filtro-mes").value;
-    const ano = document.getElementById("filtro-ano").value; // <-- ADICIONAR ISSO
-    const userId = "id_do_usuario_logado"; // Pegue da sua lógica de autenticação
-
-    // Atualiza a URL para mandar o mês e o ano
-    const response = await fetch(`/financeiro/dados?mes=${mes}&ano=${ano}&user_id=${userId}`);
-    const data = await response.json();
+    if (!usuarioLogadoId) return;
+    const mes = document.getElementById('filtro-mes').value;
+    const ano = document.getElementById('filtro-ano').value || new Date().getFullYear();
 
     // Financeiro
     try {
@@ -173,7 +169,7 @@ async function carregarDados() {
                 tabelaMesBody.innerHTML = '<tr><td colspan="6" class="text-muted py-3">Nenhum lançamento neste mês.</td></tr>';
             } else {
                 dadosFin.lista.forEach(item => {
-                    let badgeClass = item.tipo === 'Entrada' ? 'bg-verde' : (item.tipo === 'Poupanca' ? 'bg-roxo' : 'bg-vermelho');
+                    let badgeClass = item.tipo === 'Entrada' ? 'bg-success' : (item.tipo === 'Poupanca' ? 'bg-roxo' : 'bg-danger');
                     tabelaMesBody.innerHTML += `
                         <tr>
                             <td class="text-start text-muted">${item.data_formatada}</td>
@@ -339,9 +335,10 @@ function atualizarGrafico(dados) {
     });
 }
 
-// --- MÓDULOS DE EDIÇÃO ---
+// ==========================================
+// MÓDULO DE EDIÇÃO FINANCEIRA (CORRIGIDO)
+// ==========================================
 let modalEditFinObj = null;
-let modalEditTrabObj = null;
 
 function abrirModalEditFin(id, data, desc, valor, tipo, cat) {
     document.getElementById('edit-fin-id').value = id;
@@ -357,15 +354,25 @@ function abrirModalEditFin(id, data, desc, valor, tipo, cat) {
 
 async function salvarEdicaoFin() {
     const id = document.getElementById('edit-fin-id').value;
-    const formData = new FormData(document.getElementById('form-edit-fin'));
+    
+    // Captura manual (à prova de erros)
+    const formData = new FormData();
     formData.append('user_id', usuarioLogadoId);
+    formData.append('data', document.getElementById('edit-fin-data').value);
+    formData.append('descricao', document.getElementById('edit-fin-desc').value);
+    formData.append('valor', document.getElementById('edit-fin-valor').value);
+    formData.append('tipo', document.getElementById('edit-fin-tipo').value);
+    formData.append('cat_fin', document.getElementById('edit-fin-cat').value);
     
     try {
         const res = await fetch(`/financeiro/atualizar/${id}`, { method: 'PUT', body: formData });
-        if (!res.ok) throw new Error();
+        if (!res.ok) throw new Error("Falha na requisição");
         modalEditFinObj.hide();
         carregarDados(); 
-    } catch (e) { alert("Erro ao atualizar financeiro."); }
+    } catch (e) { 
+        console.error(e);
+        alert("Erro ao atualizar o lançamento."); 
+    }
 }
 
 async function excluirFin() {
@@ -378,6 +385,11 @@ async function excluirFin() {
         carregarDados(); 
     } catch (e) { alert("Erro ao excluir."); }
 }
+
+// ==========================================
+// MÓDULO DE EDIÇÃO TRABALHO (CORRIGIDO)
+// ==========================================
+let modalEditTrabObj = null;
 
 function abrirModalEditTrab(id, data, horas, proj, tipo) {
     document.getElementById('edit-trab-id').value = id;
@@ -392,15 +404,24 @@ function abrirModalEditTrab(id, data, horas, proj, tipo) {
 
 async function salvarEdicaoTrab() {
     const id = document.getElementById('edit-trab-id').value;
-    const formData = new FormData(document.getElementById('form-edit-trab'));
+    
+    // Captura manual (à prova de erros)
+    const formData = new FormData();
     formData.append('user_id', usuarioLogadoId);
+    formData.append('data', document.getElementById('edit-trab-data').value);
+    formData.append('qtd_horas', document.getElementById('edit-trab-horas').value);
+    formData.append('projeto', document.getElementById('edit-trab-proj').value);
+    formData.append('tipo', document.getElementById('edit-trab-tipo').value);
 
     try {
         const res = await fetch(`/trabalho/atualizar/${id}`, { method: 'PUT', body: formData });
-        if (!res.ok) throw new Error();
+        if (!res.ok) throw new Error("Falha na requisição");
         modalEditTrabObj.hide();
         carregarDados(); 
-    } catch (e) { alert("Erro ao atualizar trabalho."); }
+    } catch (e) { 
+        console.error(e);
+        alert("Erro ao atualizar as horas."); 
+    }
 }
 
 async function excluirTrab() {
