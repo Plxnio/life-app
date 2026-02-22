@@ -206,9 +206,19 @@ body {
     color: #2F6F4E;
 }
 
+.bg-verde {
+    background-color: #2F6F4E;
+    color: white;
+}
+
 /* Vermelho */
 .text-vermelho {
     color: #9F3A38;
+}
+
+.bg-vermelho {
+    background-color: #9F3A38;
+    color: white;
 }
 
 /* Azul */

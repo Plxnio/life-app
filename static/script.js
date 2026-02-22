@@ -148,9 +148,13 @@ function mudarAbaCadastro(tipo, botaoClicado) {
 
 // --- INTEGRAÇÃO COM BACKEND ---
 async function carregarDados() {
-    if (!usuarioLogadoId) return;
-    const mes = document.getElementById('filtro-mes').value;
-    const ano = new Date().getFullYear();
+    const mes = document.getElementById("filtro-mes").value;
+    const ano = document.getElementById("filtro-ano").value; // <-- ADICIONAR ISSO
+    const userId = "id_do_usuario_logado"; // Pegue da sua lógica de autenticação
+
+    // Atualiza a URL para mandar o mês e o ano
+    const response = await fetch(`/financeiro/dados?mes=${mes}&ano=${ano}&user_id=${userId}`);
+    const data = await response.json();
 
     // Financeiro
     try {
@@ -169,7 +173,7 @@ async function carregarDados() {
                 tabelaMesBody.innerHTML = '<tr><td colspan="6" class="text-muted py-3">Nenhum lançamento neste mês.</td></tr>';
             } else {
                 dadosFin.lista.forEach(item => {
-                    let badgeClass = item.tipo === 'Entrada' ? 'bg-success' : (item.tipo === 'Poupanca' ? 'bg-roxo' : 'bg-danger');
+                    let badgeClass = item.tipo === 'Entrada' ? 'bg-verde' : (item.tipo === 'Poupanca' ? 'bg-roxo' : 'bg-vermelho');
                     tabelaMesBody.innerHTML += `
                         <tr>
                             <td class="text-start text-muted">${item.data_formatada}</td>

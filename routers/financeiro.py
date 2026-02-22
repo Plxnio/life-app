@@ -9,11 +9,19 @@ router = APIRouter(prefix="/financeiro", tags=["Financeiro"])
 
 @router.get("/dados")
 def ler_financeiro(mes: int, ano: int, user_id: str, db: Session = Depends(get_db)):
-    transacoes = db.query(Transacao).filter(
-        text("EXTRACT(MONTH FROM data) = :mes"), 
+    # 1. Monta a busca base, filtrando sempre pelo ano e pelo usuário
+    query = db.query(Transacao).filter(
         text("EXTRACT(YEAR FROM data) = :ano"),
         Transacao.user_id == user_id
-    ).params(mes=mes, ano=ano).order_by(Transacao.data.desc()).all()
+    )
+    
+    # 2. Se o mês for maior que 0, adiciona o filtro de mês. 
+    # Se for 0 (opção "Todos"), ele não aplica esse filtro.
+    if mes > 0:
+        query = query.filter(text("EXTRACT(MONTH FROM data) = :mes"))
+        
+    # 3. Executa a busca
+    transacoes = query.params(mes=mes, ano=ano).order_by(Transacao.data.desc()).all()
     
     ganho = sum(t.valor for t in transacoes if t.tipo == 'Entrada')
     gasto = sum(t.valor for t in transacoes if t.tipo == 'Saida')

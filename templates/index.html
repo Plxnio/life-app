@@ -70,7 +70,17 @@
                     <div class="d-flex align-items-center gap-3">
                         <div class="bg-white p-1 rounded-pill shadow-sm d-flex align-items-center px-3" style="height: 45px;">
                             <i class="fas fa-filter text-muted me-2 small"></i>
-                            <select id="filtro-mes" class="form-select border-0 bg-transparent py-0 fw-bold text-azul" style="width: auto; box-shadow: none;" onchange="carregarDados()">
+                            
+                            <select id="filtro-ano" class="form-select border-0 bg-transparent py-0 fw-bold text-azul" style="width: 90px; box-shadow: none;" onchange="carregarDados()">
+                                <option value="2025">2025</option>
+                                <option value="2026" selected>2026</option>
+                                <option value="2027">2027</option>
+                            </select>
+
+                            <span class="text-muted mx-2">|</span>
+
+                            <select id="filtro-mes" class="form-select border-0 bg-transparent py-0 fw-bold text-azul" style="width: 130px; box-shadow: none;" onchange="carregarDados()">
+                                <option value="0">Todos</option>
                                 <option value="1">Janeiro</option>
                                 <option value="2">Fevereiro</option>
                                 <option value="3">Março</option>
@@ -275,7 +285,7 @@
                                 <div class="card p-4 mb-4">
                                     <h6 class="fw-bold mb-3">Detalhamento por Categoria</h6>
                                     <div class="table-responsive">
-                                        <table class="table align-middle">
+                                        <table class="table align-middle" style="font-size: 14px;">
                                             <thead>
                                                 <tr>
                                                     <th class="ps-0">Categoria</th>
@@ -299,9 +309,9 @@
                                     </div>
                                 </div>
 
-                                <button class="btn btn-outline-primary w-100 py-3 mb-4 rounded-3 fw-bold bg-white shadow-sm d-flex justify-content-center align-items-center gap-2"
+                                <button class="btn btn-primary w-100 mt-2 shadow-lg mb-4 d-flex justify-content-center align-items-center gap-2"
                                     type="button" data-bs-toggle="collapse" data-bs-target="#collapseTabelaFin" aria-expanded="false" aria-controls="collapseTabelaFin">
-                                    <i class="fas fa-list-ul"></i> Ver e Editar Lançamentos do Mês
+                                    <i class="fas fa-list-ul text-muted"></i> Ver e Editar Lançamentos do Mês
                                 </button>
 
                                 <div class="collapse mb-4" id="collapseTabelaFin">
@@ -373,7 +383,7 @@
                                     </div>
                                 </div>
 
-                                <button class="btn btn-outline-primary w-100 py-3 mb-4 rounded-3 fw-bold bg-white shadow-sm d-flex justify-content-center align-items-center gap-2"
+                                <button class="btn btn-primary w-100 mt-2 shadow-lg mb-4 d-flex justify-content-center align-items-center gap-2"
                                     type="button" data-bs-toggle="collapse" data-bs-target="#collapseTabelaTrab" aria-expanded="false" aria-controls="collapseTabelaTrab">
                                     <i class="fas fa-list-ul"></i> Ver e Editar Horas do Mês
                                 </button>
