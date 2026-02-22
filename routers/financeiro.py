@@ -90,9 +90,21 @@ def excluir_financeiro(item_id: int, user_id: str, db: Session = Depends(get_db)
 
 @router.get("/anual")
 def relatorio_financeiro_anual(ano: int, user_id: str, db: Session = Depends(get_db)):
-    transacoes = db.query(Transacao).filter(text("EXTRACT(YEAR FROM data) = :ano"), Transacao.user_id == user_id).params(ano=ano).all()
+    # O filtro pelo ano já está garantido aqui nesta linha: EXTRACT(YEAR FROM data) = :ano
+    transacoes = db.query(Transacao).filter(
+        text("EXTRACT(YEAR FROM data) = :ano"), 
+        Transacao.user_id == user_id
+    ).params(ano=ano).all()
+    
     relatorio = {}
     for t in transacoes:
-        if t.categoria not in relatorio: relatorio[t.categoria] = {m: 0.0 for m in range(1, 13)}
-        relatorio[t.categoria][t.data.month] += t.valor
+        if t.categoria not in relatorio: 
+            relatorio[t.categoria] = {m: 0.0 for m in range(1, 13)}
+            
+        # --- MESMA REGRA DA POUPANÇA ---
+        # Se for Poupança Variável (Retirada), o valor entra negativo na tabela
+        valor_real = -t.valor if (t.tipo == 'Poupanca' and t.categoria == 'Variavel') else t.valor
+        
+        relatorio[t.categoria][t.data.month] += valor_real
+        
     return relatorio
