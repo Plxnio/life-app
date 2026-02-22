@@ -13,10 +13,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:8000",
-        "https://life-app-4d44.onrender.com" # Removida a barra final /
-    ],
+    allow_origins=["http://localhost:8000", "https://life-app-4d44.onrender.com"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

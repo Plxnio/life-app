@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Life App</title>
+    <title>Life Tracker</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="/static/style.css">
@@ -14,8 +14,7 @@
 
 <body class="overflow-hidden">
 
-    <div id="login-screen" class="d-flex justify-content-center align-items-center vh-100 position-fixed w-100 bg-light"
-        style="z-index: 2000; top:0; left:0;">
+    <div id="login-screen" class="d-flex justify-content-center align-items-center vh-100 position-fixed w-100 bg-light" style="z-index: 2000; top:0; left:0;">
         <div class="card p-5 text-center shadow border-0" style="width: 380px; background: white;">
             <div class="mb-4">
                 <div class="bg-light rounded-circle d-inline-flex p-3">
@@ -30,7 +29,6 @@
 
             <button onclick="loginEmail()" class="btn btn-primary w-100 mb-2">Entrar</button>
             <button onclick="cadastrarEmail()" class="btn btn-outline-primary w-100 mb-3">Criar Cadastro</button>
-
             <p id="erro-login" class="text-danger mt-3 small d-none"></p>
         </div>
     </div>
@@ -45,17 +43,13 @@
 
                 <div class="d-flex flex-column gap-2 mb-3">
                     <button class="nav-btn active" onclick="mudarAbaCadastro('financeiro', this)" id="btn-cad-fin">
-                        <div class="icon-box"><i class="fas fa-wallet"></i></div>
-                        Financeiro
+                        <div class="icon-box"><i class="fas fa-wallet"></i></div> Financeiro
                     </button>
-                    <button id="btn-cad-trab" class="nav-btn" onclick="mudarAbaCadastro('trabalho', this)"
-                        style="display: none;">
-                        <div class="icon-box"><i class="fas fa-briefcase"></i></div>
-                        Trabalho
+                    <button id="btn-cad-trab" class="nav-btn" onclick="mudarAbaCadastro('trabalho', this)" style="display: none;">
+                        <div class="icon-box"><i class="fas fa-briefcase"></i></div> Trabalho
                     </button>
                     <button class="nav-btn" onclick="mudarAbaCadastro('fisico', this)">
-                        <div class="icon-box"><i class="fas fa-dumbbell"></i></div>
-                        Físico
+                        <div class="icon-box"><i class="fas fa-dumbbell"></i></div> Físico
                     </button>
                 </div>
 
@@ -67,7 +61,6 @@
             </div>
 
             <div class="col-12 col-md-9 col-lg-10 p-4 h-100 overflow-hidden d-flex flex-column">
-
                 <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
                     <div>
                         <h6 class="text-muted mb-1 small">Visão Geral</h6>
@@ -75,12 +68,9 @@
                     </div>
 
                     <div class="d-flex align-items-center gap-3">
-                        <div class="bg-white p-1 rounded-pill shadow-sm d-flex align-items-center px-3"
-                            style="height: 45px;">
+                        <div class="bg-white p-1 rounded-pill shadow-sm d-flex align-items-center px-3" style="height: 45px;">
                             <i class="fas fa-filter text-muted me-2 small"></i>
-                            <select id="filtro-mes"
-                                class="form-select border-0 bg-transparent py-0 fw-bold text-primary"
-                                style="width: auto; box-shadow: none;" onchange="carregarDados()">
+                            <select id="filtro-mes" class="form-select border-0 bg-transparent py-0 fw-bold text-primary" style="width: auto; box-shadow: none;" onchange="carregarDados()">
                                 <option value="1">Janeiro</option>
                                 <option value="2">Fevereiro</option>
                                 <option value="3">Março</option>
@@ -95,11 +85,14 @@
                                 <option value="12">Dezembro</option>
                             </select>
                         </div>
+                        <div class="bg-white px-4 py-2 rounded-pill shadow-sm text-primary fw-bold small d-none d-sm-block" style="height: 45px; display: flex; align-items: center;">
+                            <i class="far fa-calendar me-2"></i> Hoje
+                        </div>
                     </div>
                 </div>
 
                 <div class="row h-100 overflow-auto pb-5">
-
+                    
                     <div class="col-lg-4 mb-4">
                         <div class="card h-100 p-4">
                             <h5 class="fw-bold mb-4">Novo Lançamento</h5>
@@ -118,13 +111,11 @@
 
                                 <div id="campos-fin" class="fade-in">
                                     <div class="mb-3">
-                                        <input type="text" name="descricao" class="form-control"
-                                            placeholder="Descrição (Ex: Mercado)">
+                                        <input type="text" name="descricao" class="form-control" placeholder="Descrição (Ex: Mercado)">
                                     </div>
                                     <div class="row g-2 mb-3">
                                         <div class="col-6">
-                                            <input type="number" step="0.01" name="valor" class="form-control"
-                                                placeholder="R$ 0,00">
+                                            <input type="number" step="0.01" name="valor" class="form-control" placeholder="R$ 0,00">
                                         </div>
                                         <div class="col-6">
                                             <select name="tipo" class="form-select">
@@ -156,8 +147,7 @@
                                         </select>
                                     </div>
                                     <div class="row g-2 mb-3">
-                                        <div class="col-6"><input type="number" step="0.5" name="qtd_horas"
-                                                class="form-control" placeholder="Horas"></div>
+                                        <div class="col-6"><input type="number" step="0.5" name="qtd_horas" class="form-control" placeholder="Horas"></div>
                                         <div class="col-6">
                                             <select name="tipo_hora" class="form-select">
                                                 <option value="Normal">Normal</option>
@@ -168,107 +158,72 @@
                                 </div>
 
                                 <div id="campos-fis" class="fade-in" style="display:none;">
-                                    <h6 class="text-primary border-bottom pb-2 mb-3 mt-1 fw-bold"
-                                        style="font-size: 0.85rem;">Geral / Composição</h6>
+                                    <h6 class="text-primary border-bottom pb-2 mb-3 mt-1 fw-bold" style="font-size: 0.85rem;">Geral / Composição</h6>
                                     <div class="row g-2 mb-2">
-                                        <div class="col-6">
-                                            <input type="number" step="0.01" name="peso"
-                                                class="form-control border border-primary shadow-sm"
-                                                placeholder="Peso (kg) *" required>
-                                        </div>
-                                        <div class="col-6"><input type="number" step="0.01" name="altura"
-                                                class="form-control" placeholder="Altura (m)"></div>
+                                        <div class="col-6"><input type="number" step="0.01" name="peso" class="form-control border border-primary shadow-sm" placeholder="Peso (kg) *" required></div>
+                                        <div class="col-6"><input type="number" step="0.01" name="altura" class="form-control" placeholder="Altura (m)"></div>
                                     </div>
                                     <div class="row g-2 mb-2">
-                                        <div class="col-6"><input type="number" step="0.01" name="imc"
-                                                class="form-control" placeholder="IMC"></div>
-                                        <div class="col-6"><input type="number" step="0.01" name="razao_cintura_quadril"
-                                                class="form-control" placeholder="Cint/Quadril"></div>
+                                        <div class="col-6"><input type="number" step="0.01" name="imc" class="form-control" placeholder="IMC"></div>
+                                        <div class="col-6"><input type="number" step="0.01" name="razao_cintura_quadril" class="form-control" placeholder="Cint/Quadril"></div>
                                     </div>
                                     <div class="row g-2 mb-2">
-                                        <div class="col-6"><input type="number" step="0.01" name="massa_gorda_perc"
-                                                class="form-control" placeholder="% Gorda"></div>
-                                        <div class="col-6"><input type="number" step="0.01" name="massa_gorda_kg"
-                                                class="form-control" placeholder="KG Gorda"></div>
+                                        <div class="col-6"><input type="number" step="0.01" name="massa_gorda_perc" class="form-control" placeholder="% Gorda"></div>
+                                        <div class="col-6"><input type="number" step="0.01" name="massa_gorda_kg" class="form-control" placeholder="KG Gorda"></div>
                                     </div>
                                     <div class="row g-2 mb-2">
-                                        <div class="col-6"><input type="number" step="0.01" name="massa_magra_perc"
-                                                class="form-control" placeholder="% Magra"></div>
-                                        <div class="col-6"><input type="number" step="0.01" name="massa_magra_kg"
-                                                class="form-control" placeholder="KG Magra"></div>
+                                        <div class="col-6"><input type="number" step="0.01" name="massa_magra_perc" class="form-control" placeholder="% Magra"></div>
+                                        <div class="col-6"><input type="number" step="0.01" name="massa_magra_kg" class="form-control" placeholder="KG Magra"></div>
                                     </div>
                                     <div class="row g-2 mb-2">
-                                        <div class="col-6"><input type="number" step="0.01" name="densidade_corporal"
-                                                class="form-control" placeholder="Densidade"></div>
-                                        <div class="col-6"><input type="number" step="0.01" name="soma_dobras"
-                                                class="form-control" placeholder="Soma Dobras"></div>
+                                        <div class="col-6"><input type="number" step="0.01" name="densidade_corporal" class="form-control" placeholder="Densidade"></div>
+                                        <div class="col-6"><input type="number" step="0.01" name="soma_dobras" class="form-control" placeholder="Soma Dobras"></div>
                                     </div>
                                     <div class="row g-2 mb-3">
-                                        <div class="col-6"><input type="number" step="0.01" name="amb"
-                                                class="form-control" placeholder="AMB (Músculo)"></div>
-                                        <div class="col-6"><input type="number" step="0.01" name="agb"
-                                                class="form-control" placeholder="AGB (Gordura)"></div>
+                                        <div class="col-6"><input type="number" step="0.01" name="amb" class="form-control" placeholder="AMB (Músculo)"></div>
+                                        <div class="col-6"><input type="number" step="0.01" name="agb" class="form-control" placeholder="AGB (Gordura)"></div>
                                     </div>
 
-                                    <h6 class="text-primary border-bottom pb-2 mb-3 mt-3 fw-bold"
-                                        style="font-size: 0.85rem;">Circunferências (cm)</h6>
+                                    <h6 class="text-primary border-bottom pb-2 mb-3 mt-3 fw-bold" style="font-size: 0.85rem;">Circunferências (cm)</h6>
                                     <div class="row g-2 mb-2">
-                                        <div class="col-6"><input type="number" step="0.1" name="ombro"
-                                                class="form-control" placeholder="Ombro"></div>
-                                        <div class="col-6"><input type="number" step="0.1" name="peitoral"
-                                                class="form-control" placeholder="Peitoral"></div>
+                                        <div class="col-6"><input type="number" step="0.1" name="ombro" class="form-control" placeholder="Ombro"></div>
+                                        <div class="col-6"><input type="number" step="0.1" name="peitoral" class="form-control" placeholder="Peitoral"></div>
                                     </div>
                                     <div class="row g-2 mb-2">
-                                        <div class="col-4"><input type="number" step="0.1" name="cintura"
-                                                class="form-control" placeholder="Cintura"></div>
-                                        <div class="col-4"><input type="number" step="0.1" name="abdomen"
-                                                class="form-control" placeholder="Abdomen"></div>
-                                        <div class="col-4"><input type="number" step="0.1" name="quadril"
-                                                class="form-control" placeholder="Quadril"></div>
+                                        <div class="col-4"><input type="number" step="0.1" name="cintura" class="form-control" placeholder="Cintura"></div>
+                                        <div class="col-4"><input type="number" step="0.1" name="abdomen" class="form-control" placeholder="Abdomen"></div>
+                                        <div class="col-4"><input type="number" step="0.1" name="quadril" class="form-control" placeholder="Quadril"></div>
                                     </div>
                                     <p class="small text-muted fw-bold mt-3 mb-1">Braço Relaxado</p>
                                     <div class="row g-2 mb-2">
-                                        <div class="col-6"><input type="number" step="0.1" name="braco_rel_dir"
-                                                class="form-control" placeholder="Direito"></div>
-                                        <div class="col-6"><input type="number" step="0.1" name="braco_rel_esq"
-                                                class="form-control" placeholder="Esquerdo"></div>
+                                        <div class="col-6"><input type="number" step="0.1" name="braco_rel_dir" class="form-control" placeholder="Direito"></div>
+                                        <div class="col-6"><input type="number" step="0.1" name="braco_rel_esq" class="form-control" placeholder="Esquerdo"></div>
                                     </div>
                                     <p class="small text-muted fw-bold mt-2 mb-1">Braço Contraído</p>
                                     <div class="row g-2 mb-3">
-                                        <div class="col-6"><input type="number" step="0.1" name="braco_con_dir"
-                                                class="form-control" placeholder="Direito"></div>
-                                        <div class="col-6"><input type="number" step="0.1" name="braco_con_esq"
-                                                class="form-control" placeholder="Esquerdo"></div>
+                                        <div class="col-6"><input type="number" step="0.1" name="braco_con_dir" class="form-control" placeholder="Direito"></div>
+                                        <div class="col-6"><input type="number" step="0.1" name="braco_con_esq" class="form-control" placeholder="Esquerdo"></div>
                                     </div>
 
-                                    <h6 class="text-primary border-bottom pb-2 mb-3 mt-3 fw-bold"
-                                        style="font-size: 0.85rem;">Dobras Cutâneas (mm)</h6>
+                                    <h6 class="text-primary border-bottom pb-2 mb-3 mt-3 fw-bold" style="font-size: 0.85rem;">Dobras Cutâneas (mm)</h6>
                                     <div class="row g-2 mb-2">
-                                        <div class="col-6"><input type="number" step="0.1" name="dobra_triceps"
-                                                class="form-control" placeholder="Tríceps"></div>
-                                        <div class="col-6"><input type="number" step="0.1" name="dobra_axilar_media"
-                                                class="form-control" placeholder="Axilar Média"></div>
+                                        <div class="col-6"><input type="number" step="0.1" name="dobra_triceps" class="form-control" placeholder="Tríceps"></div>
+                                        <div class="col-6"><input type="number" step="0.1" name="dobra_axilar_media" class="form-control" placeholder="Axilar Média"></div>
                                     </div>
                                     <div class="row g-2 mb-2">
-                                        <div class="col-6"><input type="number" step="0.1" name="dobra_torax"
-                                                class="form-control" placeholder="Tórax"></div>
-                                        <div class="col-6"><input type="number" step="0.1" name="dobra_abdominal"
-                                                class="form-control" placeholder="Abdominal"></div>
+                                        <div class="col-6"><input type="number" step="0.1" name="dobra_torax" class="form-control" placeholder="Tórax"></div>
+                                        <div class="col-6"><input type="number" step="0.1" name="dobra_abdominal" class="form-control" placeholder="Abdominal"></div>
                                     </div>
                                     <div class="row g-2 mb-2">
-                                        <div class="col-6"><input type="number" step="0.1" name="dobra_suprailiaca"
-                                                class="form-control" placeholder="Suprailíaca"></div>
-                                        <div class="col-6"><input type="number" step="0.1" name="dobra_subescapular"
-                                                class="form-control" placeholder="Subescapular"></div>
+                                        <div class="col-6"><input type="number" step="0.1" name="dobra_suprailiaca" class="form-control" placeholder="Suprailíaca"></div>
+                                        <div class="col-6"><input type="number" step="0.1" name="dobra_subescapular" class="form-control" placeholder="Subescapular"></div>
                                     </div>
                                     <div class="row g-2 mb-2">
-                                        <div class="col-6"><input type="number" step="0.1" name="dobra_coxa"
-                                                class="form-control" placeholder="Coxa"></div>
+                                        <div class="col-6"><input type="number" step="0.1" name="dobra_coxa" class="form-control" placeholder="Coxa"></div>
                                     </div>
                                 </div>
 
-                                <button type="submit" class="btn btn-primary w-100 mt-3 shadow-lg">Salvar
-                                    Registro</button>
+                                <button type="submit" class="btn btn-primary w-100 mt-3 shadow-lg">Salvar Registro</button>
                             </form>
                         </div>
                     </div>
@@ -280,8 +235,7 @@
                                 <div class="row g-3 mb-4">
                                     <div class="col-md-4">
                                         <div class="card p-3 d-flex flex-row align-items-center gap-3">
-                                            <div class="icon-shape bg-light text-success"><i
-                                                    class="fas fa-arrow-up"></i></div>
+                                            <div class="icon-shape bg-light text-success"><i class="fas fa-arrow-up"></i></div>
                                             <div>
                                                 <p class="small text-muted mb-0">Entradas</p>
                                                 <h4 class="fw-bold mb-0" id="fin-ganho">R$ 0</h4>
@@ -290,8 +244,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="card p-3 d-flex flex-row align-items-center gap-3">
-                                            <div class="icon-shape bg-light text-danger"><i
-                                                    class="fas fa-arrow-down"></i></div>
+                                            <div class="icon-shape bg-light text-danger"><i class="fas fa-arrow-down"></i></div>
                                             <div>
                                                 <p class="small text-muted mb-0">Saídas</p>
                                                 <h4 class="fw-bold mb-0" id="fin-gasto">R$ 0</h4>
@@ -300,11 +253,10 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="card p-3 d-flex flex-row align-items-center gap-3">
-                                            <div class="icon-shape bg-light text-primary"><i class="fas fa-wallet"></i>
-                                            </div>
+                                            <div class="icon-shape bg-light text-primary"><i class="fas fa-wallet"></i></div>
                                             <div>
                                                 <p class="small text-muted mb-0">Lucro</p>
-                                                <h4 class="fw-bold mb-0 " id="fin-lucro">R$ 0</h4>
+                                                <h4 class="fw-bold mb-0" id="fin-lucro">R$ 0</h4>
                                             </div>
                                         </div>
                                     </div>
@@ -313,14 +265,13 @@
                                 <div class="card p-3 mb-4">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="d-flex align-items-center gap-3">
-                                            <div class="icon-shape bg-warning bg-opacity-10 text-warning"><i
-                                                    class="fas fa-piggy-bank"></i></div>
+                                            <div class="icon-shape bg-roxo-claro text-roxo"><i class="fas fa-piggy-bank"></i></div>
                                             <div>
-                                                <h5 class="fw-bold mb-0 text-warning">Poupança</h5>
+                                                <h5 class="fw-bold mb-0 text-roxo">Poupança</h5>
                                                 <small class="text-muted">Acumulado no mês</small>
                                             </div>
                                         </div>
-                                        <h2 class="fw-bold m-0" id="fin-poupanca">R$ 0,00</h2>
+                                        <h2 class="fw-bold m-0 text-roxo" id="fin-poupanca">R$ 0,00</h2>
                                     </div>
                                 </div>
 
@@ -330,7 +281,7 @@
                                         <table class="table align-middle">
                                             <thead>
                                                 <tr>
-                                                    <th class="text-center ps-0">Categoria</th>
+                                                    <th class="ps-0">Categoria</th>
                                                     <th class="text-center">Jan</th>
                                                     <th class="text-center">Fev</th>
                                                     <th class="text-center">Mar</th>
@@ -351,10 +302,8 @@
                                     </div>
                                 </div>
 
-                                <button
-                                    class="btn btn-outline-primary w-100 py-3 mb-4 rounded-3 fw-bold bg-white shadow-sm d-flex justify-content-center align-items-center gap-2"
-                                    type="button" data-bs-toggle="collapse" data-bs-target="#collapseTabelaFin"
-                                    aria-expanded="false" aria-controls="collapseTabelaFin">
+                                <button class="btn btn-outline-primary w-100 py-3 mb-4 rounded-3 fw-bold bg-white shadow-sm d-flex justify-content-center align-items-center gap-2"
+                                    type="button" data-bs-toggle="collapse" data-bs-target="#collapseTabelaFin" aria-expanded="false" aria-controls="collapseTabelaFin">
                                     <i class="fas fa-list-ul"></i> Ver e Editar Lançamentos do Mês
                                 </button>
 
@@ -362,8 +311,7 @@
                                     <div class="card p-4 border-0 shadow-sm">
                                         <h6 class="fw-bold mb-3">Detalhes do Mês</h6>
                                         <div class="table-responsive">
-                                            <table class="table align-middle text-center mb-0"
-                                                style="font-size: 0.85rem;">
+                                            <table class="table align-middle text-center mb-0" style="font-size: 0.85rem;">
                                                 <thead>
                                                     <tr>
                                                         <th class="text-start">Data</th>
@@ -374,8 +322,7 @@
                                                         <th>Ações</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody id="tabela-mes-financeiro">
-                                                </tbody>
+                                                <tbody id="tabela-mes-financeiro"></tbody>
                                             </table>
                                         </div>
                                     </div>
@@ -387,7 +334,7 @@
                                     <div class="col-md-6">
                                         <div class="card p-4">
                                             <p class="small text-muted fw-bold mb-1">PREVISÃO (BRUTO)</p>
-                                            <h2 class="fw-bold mb-0" id="trab-salario">R$ 0,00</h2>
+                                            <h2 class="fw-bold text-primary mb-0" id="trab-salario">R$ 0,00</h2>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -429,10 +376,8 @@
                                     </div>
                                 </div>
 
-                                <button
-                                    class="btn btn-outline-primary w-100 py-3 mb-4 rounded-3 fw-bold bg-white shadow-sm d-flex justify-content-center align-items-center gap-2"
-                                    type="button" data-bs-toggle="collapse" data-bs-target="#collapseTabelaTrab"
-                                    aria-expanded="false" aria-controls="collapseTabelaTrab">
+                                <button class="btn btn-outline-primary w-100 py-3 mb-4 rounded-3 fw-bold bg-white shadow-sm d-flex justify-content-center align-items-center gap-2"
+                                    type="button" data-bs-toggle="collapse" data-bs-target="#collapseTabelaTrab" aria-expanded="false" aria-controls="collapseTabelaTrab">
                                     <i class="fas fa-list-ul"></i> Ver e Editar Horas do Mês
                                 </button>
 
@@ -440,8 +385,7 @@
                                     <div class="card p-4 border-0 shadow-sm">
                                         <h6 class="fw-bold mb-3">Detalhes de Horas do Mês</h6>
                                         <div class="table-responsive">
-                                            <table class="table align-middle text-center mb-0"
-                                                style="font-size: 0.85rem;">
+                                            <table class="table align-middle text-center mb-0" style="font-size: 0.85rem;">
                                                 <thead>
                                                     <tr>
                                                         <th class="text-start">Data</th>
@@ -451,8 +395,7 @@
                                                         <th>Ações</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody id="tabela-mes-trabalho">
-                                                </tbody>
+                                                <tbody id="tabela-mes-trabalho"></tbody>
                                             </table>
                                         </div>
                                     </div>
@@ -467,8 +410,7 @@
                                 <div class="card p-4">
                                     <h6 class="fw-bold mb-3">Histórico Detalhado</h6>
                                     <div class="table-responsive">
-                                        <table class="table align-middle text-center"
-                                            style="font-size: 0.85rem; white-space: nowrap;">
+                                        <table class="table align-middle text-center" style="font-size: 0.85rem; white-space: nowrap;">
                                             <thead>
                                                 <tr>
                                                     <th>Data</th>
@@ -477,7 +419,7 @@
                                                     <th>IMC</th>
                                                     <th>% Gorda</th>
                                                     <th>KG Gorda</th>
-                                                    <th>KG Magra</th>
+                                                    <th>% Magra</th>
                                                     <th>Cintura</th>
                                                 </tr>
                                             </thead>
@@ -486,13 +428,11 @@
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
 
                     <div class="col-12 mt-4 mb-5 pb-5 d-md-none">
-                        <button class="btn btn-outline-danger w-100 py-3 rounded-4 fw-bold shadow-sm"
-                            onclick="fazerLogout()">
+                        <button class="btn btn-outline-danger w-100 py-3 rounded-4 fw-bold shadow-sm" onclick="fazerLogout()">
                             <i class="fas fa-sign-out-alt me-2"></i> Sair
                         </button>
                     </div>
@@ -512,7 +452,6 @@
                 <div class="modal-body p-4">
                     <form id="form-edit-fin">
                         <input type="hidden" id="edit-fin-id">
-
                         <div class="mb-3">
                             <label class="small text-muted fw-bold mb-1">DATA</label>
                             <input type="date" id="edit-fin-data" class="form-control" required>
@@ -547,10 +486,8 @@
                             </select>
                         </div>
                         <div class="d-flex gap-2">
-                            <button type="button" class="btn btn-danger w-50" onclick="excluirFin()"><i
-                                    class="fas fa-trash me-2"></i>Excluir</button>
-                            <button type="button" class="btn btn-primary w-50" onclick="salvarEdicaoFin()"><i
-                                    class="fas fa-save me-2"></i>Salvar</button>
+                            <button type="button" class="btn btn-danger w-50" onclick="excluirFin()"><i class="fas fa-trash me-2"></i>Excluir</button>
+                            <button type="button" class="btn btn-primary w-50" onclick="salvarEdicaoFin()"><i class="fas fa-save me-2"></i>Salvar</button>
                         </div>
                     </form>
                 </div>
@@ -568,7 +505,6 @@
                 <div class="modal-body p-4">
                     <form id="form-edit-trab">
                         <input type="hidden" id="edit-trab-id">
-
                         <div class="mb-3">
                             <label class="small text-muted fw-bold mb-1">DATA</label>
                             <input type="date" id="edit-trab-data" class="form-control" required>
@@ -596,10 +532,8 @@
                             </div>
                         </div>
                         <div class="d-flex gap-2">
-                            <button type="button" class="btn btn-danger w-50" onclick="excluirTrab()"><i
-                                    class="fas fa-trash me-2"></i>Excluir</button>
-                            <button type="button" class="btn btn-primary w-50" onclick="salvarEdicaoTrab()"><i
-                                    class="fas fa-save me-2"></i>Salvar</button>
+                            <button type="button" class="btn btn-danger w-50" onclick="excluirTrab()"><i class="fas fa-trash me-2"></i>Excluir</button>
+                            <button type="button" class="btn btn-primary w-50" onclick="salvarEdicaoTrab()"><i class="fas fa-save me-2"></i>Salvar</button>
                         </div>
                     </form>
                 </div>
@@ -610,5 +544,4 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/static/script.js"></script>
 </body>
-
 </html>

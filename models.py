@@ -4,9 +4,9 @@ from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 
 class Transacao(Base):
-    __tablename__ = "registro_financeiro" # <- NOME ALTERADO
+    __tablename__ = "registro_financeiro"
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(String, index=True) # <- NOVO
+    user_id = Column(String, index=True)
     descricao = Column(String)
     valor = Column(Float)
     tipo = Column(String)
@@ -14,18 +14,18 @@ class Transacao(Base):
     data = Column(Date)
 
 class Hora(Base):
-    __tablename__ = "registro_horas" # <- NOME ALTERADO
+    __tablename__ = "registro_horas"
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(String, index=True) # <- NOVO
+    user_id = Column(String, index=True)
     data = Column(Date)
     qtd_horas = Column(Float)
     projeto = Column(String)
     tipo = Column(String)
 
 class Fisico(Base):
-    __tablename__ = "registro_fisico" # <- NOME ALTERADO
+    __tablename__ = "registro_fisico"
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(String, index=True) # <- NOVO
+    user_id = Column(String, index=True)
     data = Column(Date)
     peso = Column(Float)
     altura = Column(Float, nullable=True)
