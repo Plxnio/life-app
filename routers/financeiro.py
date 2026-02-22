@@ -25,7 +25,10 @@ def ler_financeiro(mes: int, ano: int, user_id: str, db: Session = Depends(get_d
     
     ganho = sum(t.valor for t in transacoes if t.tipo == 'Entrada')
     gasto = sum(t.valor for t in transacoes if t.tipo == 'Saida')
-    poupanca = sum(t.valor for t in transacoes if t.tipo == 'Poupanca')
+    
+    # --- LÓGICA DA POUPANÇA ATUALIZADA ---
+    # Subtrai o valor se a categoria for "Variavel", senão soma normalmente.
+    poupanca = sum(-t.valor if t.categoria == 'Variavel' else t.valor for t in transacoes if t.tipo == 'Poupanca')
     
     lista_detalhada = [{
         "id": t.id,
