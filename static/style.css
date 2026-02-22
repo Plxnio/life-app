@@ -138,6 +138,20 @@ body {
     transform: translateY(-2px);
 }
 
+.btn-secundary {
+    background-color: #bbd3eb;
+    border: #355C7D;
+    border-radius: 12px;
+    padding: 12px;
+    font-weight: 700;
+    box-shadow: 0 10px 20px rgba(67, 24, 255, 0.2);
+}
+
+.btn-secundary:hover {
+    background-color: #719dc5;
+    transform: translateY(-2px);
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar {
     width: 6px;
