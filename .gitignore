@@ -6,6 +6,6 @@ __pycache__/
 *$py.class
 .pytest_cache/
 .vscode/
-financeiro
-ingestion
-trabalho
+financeiro.csv
+trabalho.csv
+ingestion.py
